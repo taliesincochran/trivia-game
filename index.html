@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>History Trivia Game</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' href='assets/css/style.css'>
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+</head>
+<body>
+	<!-- <div id=leftPlaceHolder>
+	</div> -->
+	<div  id= "mainArea">
+	<!-- Start page -->
+		<div id="startPage">
+			<h1  class= "triviaHeader">History Trivia</h1>
+			<button id = "startButton"></button>
+			<p id ="startText" class = "gameText">Press Button to Start Game</button>
+		</div>
+	<!-- Screen for questions -->
+		<div class="hidden" id="main">
+			<h1  class= "triviaHeader">History Trivia</h1>
+			<h2>Time Remaining: <span id="timeDisp"></span></h2>
+			<div class = id="question">
+				<span id="currentQuestion"></span>
+			</div>
+			<div id="answers" class=''>
+				<button class="questionText"><span id="answer1">1</span></button> 
+				<button class="questionText"><span id="answer2">2</span></button> 
+				<button class="questionText"><span id="answer3">3</span></button>
+				<button class="questionText"><span id="answer4">4</span></button> 
+			</div>
+		<!-- Screen for results between questions -->
+			<div class="hidden" id="feedback">
+				<h2 class= "rightAnswerText" id="result"></h2>
+				<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>		
+				<img id= "winImage" src="#">
+				<p class="rightWrongText">Right Answers: <span id="numberRight">0</span></button>
+				<p class="rightWrongText">Wrong Answers: <span id="numberWrong">0</span></button>
+			</div>
+		<!-- final screen and restart button -->
+			<div id="finalScreen" class="hidden">
+				<h2>How you did on the quiz</h2>
+				<p class="rightWrongText">Right Answers: <span id="numberRightFinal">0</span></button>
+				<p class="rightWrongText">Wrong Answers: <span id="numberWrongFinal">0</span></button>
+				<p class="rightWrongText">Unanswered: <span id="unanswered"></span></button>
+				<button id="restart">Restart</button>
+			</div>
+		</div>
+	</div>
+	<!-- jquery -->
+	<script src="https://code.jquery.com/jquery-3.2.1.js" 
+	integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  	crossorigin="anonymous"></script>
+	<script src='assets/javascript/app.js'></script>
+</body>
+</html>
