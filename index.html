@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>History Trivia Game</title>
+	<title>Trivia Game</title>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -13,40 +13,71 @@
 	</div> -->
 	<div  id= "mainArea">
 	<!-- Start page -->
-		<div id="startPage">
-			<h1  class= "triviaHeader">History Trivia</h1>
-			<button id = "startButton"></button>
-			<p id ="startText" class = "gameText">Press Button to Start Game</button>
+		<div id="catagory">
+		<h1  class= "triviaHeader">Trivia Game</h1>
+			<h1>Choose your catagory</h1>
+			<button	class="catagoryBtn"	id="entBook"></button>
+			<button	class="catagoryBtn"	id="general"></button>
+			<button	class="catagoryBtn"	id="entFilm"></button>
+			<button	class="catagoryBtn"	id="entMusic"></button>
+			<button	class="catagoryBtn"	id="entTh"></button>
+			<button	class="catagoryBtn"	id="entTV"></button>
+			<button	class="catagoryBtn"	id="entVG"></button>
+			<button	class="catagoryBtn"	id="entBG"></button>
+			<button	class="catagoryBtn"	id="sciNat"></button>
+			<button	class="catagoryBtn"	id="sciCom"></button>
+			<button	class="catagoryBtn"	id="sciMath"></button>
+			<button	class="catagoryBtn"	id="myth"></button>
+			<button	class="catagoryBtn"	id="sport"></button>
+			<button	class="catagoryBtn"	id="geo"></button>
+			<button	class="catagoryBtn"	id="his"></button>
+			<button	class="catagoryBtn"	id="pol"></button>
+			<button	class="catagoryBtn"	id="art"></button>
+			<button	class="catagoryBtn"	id="cel"></button>
+			<button	class="catagoryBtn"	id="ani"></button>
+			<button	class="catagoryBtn"	id="veh"></button>
+			<button	class="catagoryBtn"	id="entCB"></button>
+			<button	class="catagoryBtn"	id="sciGad"></button>
+			<button	class="catagoryBtn"	id="jAM"></button>
+			<button	class="catagoryBtn"	id="carAni"></button>
+		</div>
+		<div id="difficulty" class="hidden">
+			<h1>Choose Your Difficulty Level</h1>
+			<button class="difficultyBtn" id="easy">Easy</button>
+			<button class="difficultyBtn" id="medium">Medium</button>
+			<button class="difficultyBtn" id="hard">Hard</button>
 		</div>
 	<!-- Screen for questions -->
 		<div class="hidden" id="main">
 			<h1  class= "triviaHeader">History Trivia</h1>
 			<h2>Time Remaining: <span id="timeDisp"></span></h2>
-			<div class = id="question">
+			<div id="question">
 				<span id="currentQuestion"></span>
 			</div>
 			<div id="answers" class=''>
-				<button class="questionText"><span id="answer1">1</span></button> 
-				<button class="questionText"><span id="answer2">2</span></button> 
-				<button class="questionText"><span id="answer3">3</span></button>
-				<button class="questionText"><span id="answer4">4</span></button> 
+				<button class="answerBtn" id="button0"><span id="answer0">1</span></button> 
+				<button class="answerBtn" id="button1"><span id="answer1">2</span></button> 
+				<button class="answerBtn" id="button2"><span id="answer2">3</span></button>
+				<button class="answerBtn" id="button3"><span id="answer3">4</span></button> 
 			</div>
+		</div>
 		<!-- Screen for results between questions -->
-			<div class="hidden" id="feedback">
-				<h2 class= "rightAnswerText" id="result"></h2>
-				<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>		
-				<img id= "winImage" src="#">
-				<p class="rightWrongText">Right Answers: <span id="numberRight">0</span></button>
-				<p class="rightWrongText">Wrong Answers: <span id="numberWrong">0</span></button>
-			</div>
+		<div class="hidden" id="feedback">
+			<h2 class= "rightAnswerText" id="result">You are <span id="correctIncorrect"></span></h2>
+			<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>		
+			<img id= "winImage" src="#">
+			<p class="gameText">Right Answers: <span id="numberRight">0</span></p>
+			<p class="gameText">Wrong Answers: <span id="numberWrong">0</span></p>
+			<p class="numberSkipped">Number Skipped: <span id="numberSkipped">0</span></p>
+			<button id="next">Next Question</button>
+		</div>
 		<!-- final screen and restart button -->
-			<div id="finalScreen" class="hidden">
-				<h2>How you did on the quiz</h2>
-				<p class="rightWrongText">Right Answers: <span id="numberRightFinal">0</span></button>
-				<p class="rightWrongText">Wrong Answers: <span id="numberWrongFinal">0</span></button>
-				<p class="rightWrongText">Unanswered: <span id="unanswered"></span></button>
-				<button id="restart">Restart</button>
-			</div>
+		<div id="finalScreen" class="hidden">
+			<h2>How you did on the quiz</h2>
+			<p class="gameText">Right Answers: <span id="numberRightFinal">0</span></button>
+			<p class="gameText">Wrong Answers: <span id="numberWrongFinal">0</span></button>
+			<p class="gameText">Unanswered: <span id="unanswered"></span></button>
+			<button class="btn" id="restart">Restart</button>
 		</div>
 	</div>
 	<!-- jquery -->

@@ -1,6 +1,6 @@
 body {
-	background-image: url(../../assets/images/leviathan.png);
-	background-repeat:no-repeat;
+/*	background-image: url(../../images/leviathan.png);
+	background-repeat:no-repeat;*/
 	position:relative;
 }
 .hidden {
@@ -16,13 +16,89 @@ body {
 	margin-bottom:35px;
 	text-align: center;
 }
-#mainArea {
+#general {
+    background-image: url("../images/general.png");
+}
+#entBook {
+    background-image: url("../images/books.png");
+}
+#entFilm {
+    background-image: url("../images/films.png");
+}
+#entMusic {
+    background-image: url("../images/music.png");
+}
+#entTh {
+    background-image: url("../images/theater.png");
+}
+#entTV {
+    background-image: url("../images/television.png");
+}
+#entVG {
+    background-image: url("../images/videoGames.png");
+}
+#entBG {
+    background-image: url("../images/boardGames.png");
+}
+#sciNat {
+    background-image: url("../images/nature.png");
+}
+#sciCom {
+    background-image: url("../images/computers.png");
+}
+#sciMath {
+    background-image: url("../images/math.png");
+}
+#myth {
+    background-image: url("../images/mythology.png");
+}
+#sport {
+    background-image: url("../images/sports.png");
+}
+#geo {
+    background-image: url("../images/geology.png");
+}
+#his {
+    background-image: url("../images/history.png");
+}
+#pol {  
+    background-image: url("../images/politics.png");
+}
+#art {
+    background-image: url("../images/art.png");
+}
+#cel {
+    background-image: url("../images/celebrities.png");
+}
+#ani {
+    background-image: url("../images/animals.png");
+}
+#veh {
+    background-image: url("../images/vehicals.png");
+}
+#entCB {
+    background-image: url("../images/comics.png");
+}
+#sciGad {
+    background-image: url("../images/gadgets.png");
+}
+#jAM {
+    background-image: url("../images/anime.png");
+}
+#carAni {
+    background-image: url("../images/cartoons.png");
+}
+/*#mainArea {
     width: 457px;
     height: 517px;
     position: absolute;
     left: 415px;
     top: 24px;
 
+}*/
+.catagoryBtn {
+    width:200px;
+    height:67px;
 }
 #startButton {
     position: relative;
@@ -34,7 +110,7 @@ body {
     border-radius: 50%;
     background-color:#868686;
     border-width: 0px;
-    background-image: url(../../assets/images/leviathanTop.png);
+    background-image: url(../../images/leviathanTop.png);
     font-family: 'Playfair Display', serif;
 }
 #startText {
