@@ -93,20 +93,22 @@ var game = {
 			"name": "Cartoon & Animations",
 		},
 	},
-	"difficultyChoosen":"",
-	"catagoryChoosen":"",
-	"catagoryNumber":0,
-	"catagoryName":"",
-	"correctAnswer":"",
-	"queryURL":"",
-	"correctBtn":"",
+	"stop":false,
+	"difficultyChoosen": undefined,
+	"catagoryChoosen": undefined,
+	"catagoryNumber": undefined,
+	"catagoryName": undefined,
+	"correctAnswer": undefined,
+	"queryURL": undefined,
+	"currentQuestion": undefined,
+	"correctBtn": undefined,
+	"timerCount":30,
 	//tracks game progress and number of wins
 	"questionNumber": 0,
 	"winCounter":0,
 	"playerRight":0,
 	"playerWrong":0,
 	"playerSkipped":0,
-
 	queryURL:"",
 	"chooseCatagory": function() {
 		$(".catagoryBtn").on("click", function() {
@@ -133,6 +135,17 @@ var game = {
 			
 		})
 	},
+	"setTimer": function() {
+		game.timerCount--;
+		if (game.timerCount >= 0) {
+			$("#timeDisp").text(game.timerCount);
+		} else {
+			$("#timeDisp").text("0");
+		}
+		if (game.timerCount === 0) {
+			game.skippedQuestion();
+		}
+	},
 	"chooseDifficulty": function() {
 		$(".difficultyBtn").on("click", function() {
 			game.difficultyChoosen = this.id;
@@ -151,19 +164,20 @@ var game = {
 		url : game.queryURL,
 		method: "GET"
 		}).done(function(response) {
-			$("#currentQuestion").html(response.results[game.questionNumber].question);
+			game.currentQuestion = response.results[game.questionNumber].question;
+			$("#currentQuestion").html(game.currentQuestion);
 		//array of possible incorrect answer, then adds correct answer at a random place
 			var possible = [response.results[game.questionNumber].incorrect_answers[0],response.results[game.questionNumber].incorrect_answers[1],response.results[game.questionNumber].incorrect_answers[2],"place holder"];
 			var correctPlace = Math.floor(Math.random()*4);
 			game.correctAnswer= response.results[game.questionNumber].correct_answer;
 			if (correctPlace=0) {
-				game.correctBtn = "button0"
+				game.correctBtn = "button0";
 			} else if (correctPlace = 1) {
 				game.correctBtn = "button1"
 			} else if (correctPlace = 2) {
-				game.correctBtn = "button2"
+				game.correctBtn = "button2";
 			} else {
-				game.correctBtn = "button3"
+				game.correctBtn = "button3";
 			}
 			console.log(response.results[game.questionNumber].correct_answer);
 			possible.splice(correctPlace,0,game.correctAnswer);
@@ -172,65 +186,107 @@ var game = {
 			$("#answer1").html(possible[1]);
 			$("#answer2").html(possible[2]);
 			$("#answer3").html(possible[3]);
-			game.setTimer();
-			game.checkAnswer();
+			game.timerCount=30;		
 			
 		})
-	},
-	"setTimer": function() {
-		setTimeout(game.skipQuestion,30000);		
-
+	},	
+	"skippedQuestion": function() {
+		game.rightAnswer();
+		$("#main").addClass('hidden');
+		$("#feedback").removeClass('hidden');
+		game.playerSkipped++;
+		$("#correctIncorrect").text("out of time.");
 	},
 	"checkAnswer": function() {
 		$(".answerBtn").on('click', function() {
 			if (this.id == game.correctBtn) {
-				console.log(this.id);
-				game.playerRight++;
 				game.correctScreen();
+				game.playerRight++;
+				game.update();
+				game.stop=true;
+				console.log(game.playerRight);
 			} else {
 				game.incorrectScreen();
+				game.playerWrong++;
+				game.update();
+				game.stop=true;
+				console.log(game.playerWrong);
 			}
 		})
 	},
-
-
 	"update": function () {
-		$("#numberRight").text(game.playerRight);
-		$('#numberWrong').text(game.playerWrong);
-		$('#numberSkipped').text(game.playerSkipped);
+		$(".numberRight").text(game.playerRight);
+		$('.numberWrong').text(game.playerWrong);
+		$('.numberSkipped').text(game.playerSkipped);
 	},
 	"correctScreen": function () {
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');
-		game.rightAnswer();
-		$("#rightAnswer").text(game.correctAnswer);
-		game.update();
-		game.playerRight++;
+		game.rightAnswer();			
+		$("#correctIncorrect").text("correct");
+		setTimeout(game.nextQuestion,3500);
 	},
 	"rightAnswer": function () {
-		$("#correctIncorrect").text("correct");
+		$("#rightAnswer").html(game.correctAnswer);
 	},
 	"incorrectScreen": function () {
-		$("correctIncorrect").text("incorrect.");
+		$("#correctIncorrect").text("incorrect.");
 		$("#main").addClass('hidden');
-		$("#feedback").removeClass('hidden');
-		game.playerWrong++;
-		setTimeout (game.rightAnswer,2000)
-		game.update();
-		setTimeout(nextQuestion,3500);
+		$("#feedback").removeClass('hidden');		
+		console.log(game.playerWrong, game.questionNumber)
+		setTimeout(game.rightAnswer, 500);
+		setTimeout(game.nextQuestion,3500);
 	},
 	"nextQuestion": function () {
-		$("#main").removeClass('hidden');
-		$("#feedback").addClass('hidden');
-		$("#right").empty();
-		$("#rightAnswer").empty();
-		game.questionNumber++;
-	}
-
+		if(game.questionNumber < 10) {
+			game.timerCount = 30;
+			game.correctAnswer = undefined;
+			game.correctBtn = undefined;
+			$("#main").removeClass('hidden');
+			$("#feedback").addClass('hidden');
+			$("#rightAnswer").empty();
+			$("#currentQuestion").empty();
+			$("#answer0").empty();
+			$("#answer1").empty();
+			$("#answer2").empty();
+			$("#answer3").empty();
+			game.getQuestion();
+		} else {
+			$("#feedback").addClass('hidden');
+			$("#finalScreen").removeClass('hidden');
+			game.update();
+		}
+	},
+	"reset": function () {	
+		$("#restart").on("click", function () {
+			$('#catagory').removeClass("hidden");
+			$("#finalScreen").addClass('hidden');
+			$("#currentQuestion").empty();
+			$("#rightAnswer").empty();
+			$("#answer0").empty();
+			$("#answer1").empty();
+			$("#answer2").empty();
+			$("#answer3").empty();
+			game.stop =false;
+			game.difficultyChoosen = undefined;
+			game.catagoryChoosen = undefined;
+			game.catagoryNumber= undefined;
+			game.catagoryName = undefined;
+			game.currentQuestion = undefined;
+			game.correctAnswer = undefined;
+			game.queryURL = undefined;
+			game.correctBtn = undefined;
+			game.timerCount = 30,
+			game.questionNumber = 0;
+			game.winCounter =0;
+			game.playerRight =0;
+			game.playerWrong= 0;
+			game.playerSkipped= 0;
+		})
+	},
 }
-	
-
+setInterval(game.setTimer,1000);
 game.chooseCatagory();
-
-
+game.checkAnswer();
+game.reset();
 

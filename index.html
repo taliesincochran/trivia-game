@@ -51,7 +51,7 @@
 		<div class="hidden" id="main">
 			<h2 class= "triviaHeader">Trivia Game</h1>
 			<h2>Catagory: <span class="dispCat"></span></h1>
-			<h2>Time Remaining: <span id="timeDisp"></span></h2>
+			<h2>Time Remaining: <span id="timeDisp">30 seconds</span></h2>
 			<div id="question">
 				<span id="currentQuestion"></span>
 			</div>
@@ -65,19 +65,18 @@
 		<!-- Screen for results between questions -->
 		<div class="hidden" id="feedback">
 			<h2 class= "rightAnswerText" id="result">You are <span id="correctIncorrect"></span></h2>
-			<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>		
+			<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>
 			<img id= "winImage" src="#">
-			<p class="gameText">Right Answers: <span id="numberRight">0</span></p>
-			<p class="gameText">Wrong Answers: <span id="numberWrong">0</span></p>
-			<p class="numberSkipped">Number Skipped: <span id="numberSkipped">0</span></p>
-			<button id="next">Next Question</button>
+			<p class="gameText">Right Answers: <span class="numberRight">0</span></p>
+			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></p>
+			<p class="gameText">Unanswered: <span class="numberSkipped">0</span></p>
 		</div>
 		<!-- final screen and restart button -->
 		<div id="finalScreen" class="hidden">
 			<h2>How you did on the quiz</h2>
-			<p class="gameText">Right Answers: <span id="numberRightFinal">0</span></button>
-			<p class="gameText">Wrong Answers: <span id="numberWrongFinal">0</span></button>
-			<p class="gameText">Unanswered: <span id="unanswered"></span></button>
+			<p class="gameText">Right Answers: <span class="numberRight">0</span></button>
+			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></button>
+			<p class="gameText">Unanswered: <span class="numberSkipped"></span></button>
 			<button class="btn" id="restart">Restart</button>
 		</div>
 	</div>

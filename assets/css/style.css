@@ -19,8 +19,6 @@ body {
 
 #general {
     background-image: url("../images/general.png");
-    width: 100px;
-    height:33px;
 }
 #entBook {
     background-image: url("../images/books.png");
@@ -98,8 +96,8 @@ body {
 
 }*/
 .catagoryBtn {
-    width:100px;
-    height:33px;
+    width:200px;
+    height:67px;
 }
 #startButton {
     position: relative;
