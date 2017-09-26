@@ -16,8 +16,11 @@ body {
 	margin-bottom:35px;
 	text-align: center;
 }
+
 #general {
     background-image: url("../images/general.png");
+    width: 100px;
+    height:33px;
 }
 #entBook {
     background-image: url("../images/books.png");
@@ -27,9 +30,6 @@ body {
 }
 #entMusic {
     background-image: url("../images/music.png");
-}
-#entTh {
-    background-image: url("../images/theater.png");
 }
 #entTV {
     background-image: url("../images/television.png");
@@ -64,9 +64,9 @@ body {
 #pol {  
     background-image: url("../images/politics.png");
 }
-#art {
+/*#art {
     background-image: url("../images/art.png");
-}
+}*/
 #cel {
     background-image: url("../images/celebrities.png");
 }
@@ -79,15 +79,16 @@ body {
 #entCB {
     background-image: url("../images/comics.png");
 }
-#sciGad {
+/*#sciGad {
     background-image: url("../images/gadgets.png");
-}
+}*/
 #jAM {
     background-image: url("../images/anime.png");
 }
 #carAni {
     background-image: url("../images/cartoons.png");
 }
+
 /*#mainArea {
     width: 457px;
     height: 517px;
@@ -97,8 +98,8 @@ body {
 
 }*/
 .catagoryBtn {
-    width:200px;
-    height:67px;
+    width:100px;
+    height:33px;
 }
 #startButton {
     position: relative;

@@ -20,7 +20,6 @@
 			<button	class="catagoryBtn"	id="general"></button>
 			<button	class="catagoryBtn"	id="entFilm"></button>
 			<button	class="catagoryBtn"	id="entMusic"></button>
-			<button	class="catagoryBtn"	id="entTh"></button>
 			<button	class="catagoryBtn"	id="entTV"></button>
 			<button	class="catagoryBtn"	id="entVG"></button>
 			<button	class="catagoryBtn"	id="entBG"></button>
@@ -31,8 +30,8 @@
 			<button	class="catagoryBtn"	id="sport"></button>
 			<button	class="catagoryBtn"	id="geo"></button>
 			<button	class="catagoryBtn"	id="his"></button>
-			<button	class="catagoryBtn"	id="pol"></button>
-			<button	class="catagoryBtn"	id="art"></button>
+			<button	class="catagoryBtn" id="pol"></button>
+<!-- 			<button	class="catagoryBtn"	id="art"></button> -->
 			<button	class="catagoryBtn"	id="cel"></button>
 			<button	class="catagoryBtn"	id="ani"></button>
 			<button	class="catagoryBtn"	id="veh"></button>
@@ -42,19 +41,21 @@
 			<button	class="catagoryBtn"	id="carAni"></button>
 		</div>
 		<div id="difficulty" class="hidden">
-			<h1>Choose Your Difficulty Level</h1>
+			<h2>Catagory: <span class="dispCat"></span></h1>
+			<h2>Choose Your Difficulty Level</h1>
 			<button class="difficultyBtn" id="easy">Easy</button>
 			<button class="difficultyBtn" id="medium">Medium</button>
 			<button class="difficultyBtn" id="hard">Hard</button>
 		</div>
 	<!-- Screen for questions -->
 		<div class="hidden" id="main">
-			<h1  class= "triviaHeader">History Trivia</h1>
+			<h2 class= "triviaHeader">Trivia Game</h1>
+			<h2>Catagory: <span class="dispCat"></span></h1>
 			<h2>Time Remaining: <span id="timeDisp"></span></h2>
 			<div id="question">
 				<span id="currentQuestion"></span>
 			</div>
-			<div id="answers" class=''>
+			<div id="answers">
 				<button class="answerBtn" id="button0"><span id="answer0">1</span></button> 
 				<button class="answerBtn" id="button1"><span id="answer1">2</span></button> 
 				<button class="answerBtn" id="button2"><span id="answer2">3</span></button>
