@@ -6,54 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel='stylesheet' type='text/css' href='assets/css/style.css'>
-	<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Encode+Sans+Expanded:700" rel="stylesheet">
 </head>
 <body>
-	<!-- <div id=leftPlaceHolder>
-	</div> -->
 	<div  id= "mainArea">
 	<!-- Start page -->
-		<div id="catagory">
+		<div id="category">
 		<h1  class= "triviaHeader">Trivia Game</h1>
-			<h1>Choose your catagory</h1>
-			<button	class="catagoryBtn"	id="entBook"></button>
-			<button	class="catagoryBtn"	id="general"></button>
-			<button	class="catagoryBtn"	id="entFilm"></button>
-			<button	class="catagoryBtn"	id="entMusic"></button>
-			<button	class="catagoryBtn"	id="entTV"></button>
-			<button	class="catagoryBtn"	id="entVG"></button>
-			<button	class="catagoryBtn"	id="entBG"></button>
-			<button	class="catagoryBtn"	id="sciNat"></button>
-			<button	class="catagoryBtn"	id="sciCom"></button>
-			<button	class="catagoryBtn"	id="sciMath"></button>
-			<button	class="catagoryBtn"	id="myth"></button>
-			<button	class="catagoryBtn"	id="sport"></button>
-			<button	class="catagoryBtn"	id="geo"></button>
-			<button	class="catagoryBtn"	id="his"></button>
-			<button	class="catagoryBtn" id="pol"></button>
-<!-- 			<button	class="catagoryBtn"	id="art"></button> -->
-			<button	class="catagoryBtn"	id="cel"></button>
-			<button	class="catagoryBtn"	id="ani"></button>
-			<button	class="catagoryBtn"	id="veh"></button>
-			<button	class="catagoryBtn"	id="entCB"></button>
-			<button	class="catagoryBtn"	id="sciGad"></button>
-			<button	class="catagoryBtn"	id="jAM"></button>
-			<button	class="catagoryBtn"	id="carAni"></button>
+			<h1 class= "gameText">Choose your category</h1>
+			<button	class="categoryBtn"	id="entBook"></button>
+			<button	class="categoryBtn"	id="general"></button>
+			<button	class="categoryBtn"	id="entFilm"></button>
+			<button	class="categoryBtn"	id="entMusic"></button>
+			<button	class="categoryBtn"	id="entTV"></button>
+			<button	class="categoryBtn"	id="entVG"></button>
+			<button	class="categoryBtn"	id="entBG"></button>
+			<button	class="categoryBtn"	id="sciNat"></button>
+			<button	class="categoryBtn"	id="sciCom"></button>
+			<button	class="categoryBtn"	id="sciMath"></button>
+			<button	class="categoryBtn"	id="myth"></button>
+			<button	class="categoryBtn"	id="sport"></button>
+			<button	class="categoryBtn"	id="geo"></button>
+			<button	class="categoryBtn"	id="his"></button>
+			<button	class="categoryBtn" id="pol"></button>
+			<button	class="categoryBtn"	id="cel"></button>
+			<button	class="categoryBtn"	id="ani"></button>
+			<button	class="categoryBtn"	id="veh"></button>
+			<button	class="categoryBtn"	id="entCB"></button>
+			<button	class="categoryBtn"	id="jAM"></button>
+			<button	class="categoryBtn"	id="carAni"></button>
 		</div>
 		<div id="difficulty" class="hidden">
-			<h2>Catagory: <span class="dispCat"></span></h1>
-			<h2>Choose Your Difficulty Level</h1>
+			<h2 class="triviaHeader">category: <span class="dispCat"></span></h2>
+			<h2 class="gameText">Choose Your Difficulty Level</h2>
 			<button class="difficultyBtn" id="easy">Easy</button>
 			<button class="difficultyBtn" id="medium">Medium</button>
 			<button class="difficultyBtn" id="hard">Hard</button>
 		</div>
 	<!-- Screen for questions -->
 		<div class="hidden" id="main">
-			<h2 class= "triviaHeader">Trivia Game</h1>
-			<h2>Catagory: <span class="dispCat"></span></h1>
-			<h2>Time Remaining: <span id="timeDisp">30 seconds</span></h2>
+			<h2 class= "triviaHeader">Trivia Game</h2>
+			<h2 class="gameText">Category: <span class="dispCat gameText"></span></h2>
+			<h2 class="gameText">Time Remaining: <span id="timeDisp" class="gameText">30</span> seconds</h2>
 			<div id="question">
-				<span id="currentQuestion"></span>
+				<span id="currentQuestion" class="gameText"></span>
 			</div>
 			<div id="answers">
 				<button class="answerBtn" id="button0"><span id="answer0">1</span></button> 
@@ -64,22 +60,25 @@
 		</div>
 		<!-- Screen for results between questions -->
 		<div class="hidden" id="feedback">
-			<h2 class= "rightAnswerText" id="result">You are <span id="correctIncorrect"></span></h2>
-			<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer"></span></h2>
-			<img id= "winImage" src="#">
+			<h2 class="triviaHeader">Time Remaining: <span id="timeDisp2" class="gameText"></span> seconds</h2>
+			<h2 class= "rightAnswerText" id="result">You are <span id="correctIncorrect" class="gameText"></span></h2>
+			<h2 class= "rightAnswerText">The right answer is: <span id="rightAnswer" class="gameText"></span></h2>
 			<p class="gameText">Right Answers: <span class="numberRight">0</span></p>
 			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></p>
 			<p class="gameText">Unanswered: <span class="numberSkipped">0</span></p>
 		</div>
 		<!-- final screen and restart button -->
 		<div id="finalScreen" class="hidden">
-			<h2>How you did on the quiz</h2>
-			<p class="gameText">Right Answers: <span class="numberRight">0</span></button>
-			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></button>
-			<p class="gameText">Unanswered: <span class="numberSkipped"></span></button>
+			<h2 class="triviaHeader">Time Remaining: <span id="timeDisp3"></span> seconds</h2>
+			<h2 class="triviaHeader">How you did on the quiz</h2>
+			<p class="gameText">Right Answers: <span class="numberRight">0</span></p>
+			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></p>
+			<p class="gameText">Unanswered: <span class="numberSkipped"></span></p>
 			<button class="btn" id="restart">Restart</button>
 		</div>
 	</div>
+
+
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-3.2.1.js" 
 	integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="

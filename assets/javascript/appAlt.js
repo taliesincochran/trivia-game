@@ -1,5 +1,5 @@
+var response;
 var game = {
-	//trivia categories from API
 	"triviaCategories": {
 		"general": {
 			"number": 9,
@@ -61,6 +61,10 @@ var game = {
 			"number": 24,
 			"name": "Politics",
 		},
+		// "art":{
+		// 	"number": 25,
+		// 	"name": "Art",
+		// },
 		"cel":{
 			"number": 26,
 			"name": "Celebrities",
@@ -77,6 +81,10 @@ var game = {
 			"number": 29,
 			"name": "Comics",
 		},
+		// "sciGad":{
+		// 	"number": 30,
+		// 	"name": "Gadgets",
+		// },
 		"jAM":{
 			"number": 31,
 			"name": "Japanese Anime & Manga",
@@ -86,13 +94,12 @@ var game = {
 			"name": "Cartoon & Animations",
 		},
 	},
-	//variables used throughout game
+	"questionArray":[],
 	"stop":false,
-	"intID": undefined,
 	"difficultyChoosen": undefined,
-	"categoryChoosen": undefined,
-	"categoryNumber": undefined,
-	"categoryName": undefined,
+	"catagoryChoosen": undefined,
+	"catagoryNumber": undefined,
+	"catagoryName": undefined,
 	"correctAnswer": undefined,
 	"queryURL": undefined,
 	"currentQuestion": undefined,
@@ -105,74 +112,55 @@ var game = {
 	"playerWrong":0,
 	"playerSkipped":0,
 	"response":undefined,
-	"queryURL":"",
-//restarts timer
-	"startInt": function() {
-		game.intID = setInterval(game.setTimer,1000);
+	queryURL:"",
+	"chooseCatagory": function() {
+		$(".catagoryBtn").on("click", function() {
+			game.catagoryChoosen = this.id;
+			game.catagoryName = game.triviaCategories[game.catagoryChoosen].name;
+			game.catagoryNumber = game.triviaCategories[game.catagoryChoosen].number;
+			$("#catagory").addClass("hidden");
+			$("#difficulty").removeClass("hidden");
+			if(game.catagoryChoosen == "entBG") {
+				$("#hard").addClass("hidden");
+				$("#medium").addClass("hidden");
+			} else if (game.catagoryChoosen == "myth" || game.catagoryChoosen == "sport" || game.catagoryChoosen == "carAni") {
+				$("#hard").addClass("hidden");
+			} else if (game.catagoryChoosen == "ani") {
+				$("#easy").addClass("hidden");
+			} else if (game.catagoryChoosen == "sciMath" || game.catagoryChoosen == "pol" || game.catagoryChoosen == "cel"   || game.catagoryChoosen == "entCB") {
+				$("#hard").addClass("hidden");
+				$("#easy").addClass("hidden");
+			}
+			console.log(game.catagoryChoosen);
+			console.log(game.catagoryName);
+			$(".dispCat").html(game.catagoryName);
+			game.chooseDifficulty();
+			
+		})
 	},
-//Stops timer
-	"stopInt": function () {
-		clearInterval(game.intID);
-	},
-
-//Used count down interval to display time and what to do when it hits zero
 	"setTimer": function() {
 		game.timerCount--;
-		if (game.timerCount >= 0 && !game.stop) {
+		if (game.timerCount >= 0) {
 			$("#timeDisp").text(game.timerCount);
-			$("#timeDisp2").text(game.timerCount);
-			$("#timeDisp3").text(game.timerCount);
-		} else if (game.timerCount < 0) {
-			$("#timeDisp").text("0");
-			$("#timeDisp2").text("0");
-			$("#timeDisp3").text("0");
 		} else {
-			$("#timeDisp").text(game.finalTime);
-			$("#timeDisp2").text(game.finalTime);
-			$("#timeDisp3").text(game.finalTime);
+			$("#timeDisp").text("0");
 		}
 		if (game.timerCount === 0) {
 			game.skippedQuestion();
 		}
 	},
-
-//Functions to get query, first category, then diffigulty, then the ajax request
-	"choosecategory": function() {
-		$(".categoryBtn").on("click", function() {
-			game.categoryChoosen = this.id;
-			game.categoryName = game.triviaCategories[game.categoryChoosen].name;
-			game.categoryNumber = game.triviaCategories[game.categoryChoosen].number;
-			$("#category").addClass("hidden");
-			$("#difficulty").removeClass("hidden");
-			if(game.categoryChoosen == "entBG") {
-				$("#hard").addClass("hidden");
-				$("#medium").addClass("hidden");
-			} else if (game.categoryChoosen == "myth" || game.categoryChoosen == "sport" || game.categoryChoosen == "carAni") {
-				$("#hard").addClass("hidden");
-			} else if (game.categoryChoosen == "ani") {
-				$("#easy").addClass("hidden");
-			} else if (game.categoryChoosen == "sciMath" || game.categoryChoosen == "pol" || game.categoryChoosen == "cel"   || game.categoryChoosen == "entCB") {
-				$("#hard").addClass("hidden");
-				$("#easy").addClass("hidden");
-			}
-			console.log(game.categoryChoosen);
-			console.log(game.categoryName);
-			$(".dispCat").html(game.categoryName);
-			game.chooseDifficulty();
-			
-		})
-	},
 	"chooseDifficulty": function() {
 		$(".difficultyBtn").on("click", function() {
 			game.difficultyChoosen = this.id;
-			// $(".dispCat").html(game.categoryName);
+			// $(".dispCat").html(game.catagoryName);
 			console.log(this);
-			console.log(game.categoryNumber, game.categoryName, game.categoryChoosen);
-			game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
+			console.log(game.catagoryNumber, game.catagoryName, game.catagoryChoosen);
+			game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.catagoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
 			console.log(game.queryURL);
 			$("#difficulty").addClass("hidden");
 			$("#main").removeClass("hidden");
 			game.getQuestion();
+			game.getCurrentQuestion();
 		})
 	},	
 	"getQuestion": function() {
@@ -181,17 +169,10 @@ var game = {
 		url : game.queryURL,
 		method: "GET"
 		}).done(function(response) {
-			game.response = response;
-			console.log(game.response);
-			game.getCurrentQuestion();
+			game.response = JSON.parse(response);
 		})
-
 	},
-
-//Function that changes question, questions are stored locally after ajax request
 	"getCurrentQuestion" : function() {
-	//to prevent timer from displaying incorrectly as page loads
-		$("#timeDisp").text("30");
 		$("#currentQuestion").html(game.response.results[game.questionNumber].question);
 		//array of possible incorrect answer, then adds correct answer at a random place
 		var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
@@ -212,46 +193,9 @@ var game = {
 		$("#answer0").html(possible[0]);
 		$("#answer1").html(possible[1]);
 		$("#answer2").html(possible[2]);
-		$("#answer3").html(possible[3]);	
-		game.startInt();
-		game.questionNumber++;	
+		$("#answer3").html(possible[3]);
+		game.timerCount=30;				
 	},	
-
-//Function that checks if answer is correct or not
-	"checkAnswer": function() {
-		$(".answerBtn").on('click', function() {
-		//stops timer on answer
-			game.stopInt();
-		//allows time when question is answered to be displayed as timer is reset
-			game.finalTime= game.timerCount;
-			game.setTimer();
-			game.timerCount = 30;
-		//if answer is correct...
-			if (this.id == game.correctBtn) {
-				game.correctScreen();
-				game.playerRight++;
-				game.update();
-				console.log(game.playerRight);
-		//if answer is incorrect...
-			} else {
-				game.incorrectScreen();
-				game.playerWrong++;
-				game.update();
-				console.log(game.playerWrong);
-			}
-		})
-	},
-//updates feedback and final screen
-	"update": function () {
-		$(".numberRight").text(game.playerRight);
-		$('.numberWrong').text(game.playerWrong);
-		$('.numberSkipped').text(game.playerSkipped);
-	},
-//displays right answer
-	"rightAnswer": function () {
-		$("#rightAnswer").html(game.correctAnswer);
-	},
-//if timer runs out on a question	
 	"skippedQuestion": function() {
 		game.rightAnswer();
 		$("#main").addClass('hidden');
@@ -259,7 +203,28 @@ var game = {
 		game.playerSkipped++;
 		$("#correctIncorrect").text("out of time.");
 	},
-//if answer is right, shows this
+	"checkAnswer": function() {
+		$(".answerBtn").on('click', function() {
+			if (this.id == game.correctBtn) {
+				game.correctScreen();
+				game.playerRight++;
+				game.update();
+				game.stop=true;
+				console.log(game.playerRight);
+			} else {
+				game.incorrectScreen();
+				game.playerWrong++;
+				game.update();
+				game.stop=true;
+				console.log(game.playerWrong);
+			}
+		})
+	},
+	"update": function () {
+		$(".numberRight").text(game.playerRight);
+		$('.numberWrong').text(game.playerWrong);
+		$('.numberSkipped').text(game.playerSkipped);
+	},
 	"correctScreen": function () {
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');
@@ -267,23 +232,24 @@ var game = {
 		$("#correctIncorrect").text("correct");
 		setTimeout(game.nextQuestion,3500);
 	},
-//if answer is wrong, shows this
+	"rightAnswer": function () {
+		$("#rightAnswer").html(game.correctAnswer);
+	},
 	"incorrectScreen": function () {
 		$("#correctIncorrect").text("incorrect.");
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');		
 		console.log(game.playerWrong, game.questionNumber)
 		setTimeout(game.rightAnswer, 500);
-		setTimeout(game.nextQuestion,2500);
+		setTimeout(game.nextQuestion,3500);
 	},
-//goes to next question or end screen
 	"nextQuestion": function () {
-	//game continues if less than 10 questions have been answered
-		if(game.questionNumber < 10) {			
-		//resets game variables and html that display and hold questions and answers
+		if(game.questionNumber < 10) {
+			game.timerCount = 30;
 			game.correctAnswer = undefined;
 			game.correctBtn = undefined;
-			game.stop=false;
+			$("#main").removeClass('hidden');
+			$("#feedback").addClass('hidden');
 			$("#rightAnswer").empty();
 			$("#currentQuestion").empty();
 			$("#answer0").empty();
@@ -291,20 +257,15 @@ var game = {
 			$("#answer2").empty();
 			$("#answer3").empty();
 			game.getCurrentQuestion();
-			$("#main").removeClass('hidden');
-			$("#feedback").addClass('hidden');
-			game.timerCount = 30;
 		} else {
 			$("#feedback").addClass('hidden');
-			clearInterval(game.intID);
 			$("#finalScreen").removeClass('hidden');
 			game.update();
 		}
 	},
-//if reset button is pressed on end screen, resets variables
 	"reset": function () {	
 		$("#restart").on("click", function () {
-			$('#category').removeClass("hidden");
+			$('#catagory').removeClass("hidden");
 			$("#finalScreen").addClass('hidden');
 			$("#currentQuestion").empty();
 			$("#rightAnswer").empty();
@@ -314,9 +275,9 @@ var game = {
 			$("#answer3").empty();
 			game.stop =false;
 			game.difficultyChoosen = undefined;
-			game.categoryChoosen = undefined;
-			game.categoryNumber= undefined;
-			game.categoryName = undefined;
+			game.catagoryChoosen = undefined;
+			game.catagoryNumber= undefined;
+			game.catagoryName = undefined;
 			game.currentQuestion = undefined;
 			game.correctAnswer = undefined;
 			game.queryURL = undefined;
@@ -330,9 +291,8 @@ var game = {
 		})
 	},
 }
-
-//starts game
-game.choosecategory();
+setInterval(game.setTimer,1000);
+game.chooseCatagory();
 game.checkAnswer();
 game.reset();
 

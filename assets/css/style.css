@@ -1,7 +1,18 @@
 body {
-/*	background-image: url(../../images/leviathan.png);
-	background-repeat:no-repeat;*/
+	background-image: url(../images/background.png);
+    background-size:100%;
 	position:relative;
+    background-repeat: no-repeat;
+    background-color: black;
+    text-align: center;
+    font-family: 'Encode Sans Expanded', sans-serif;
+    font-weight: bold;
+    text-shadow:     0 1px #808d93,
+    -1px 0 #cdd2d5,
+    -1px 2px #808d93,
+    -2px 1px #cdd2d5,
+    -2px 3px #808d93,
+    -3px 2px #cdd2d5;
 }
 .hidden {
 	display:none;
@@ -12,11 +23,39 @@ body {
 	bottom:67px;
 }
 .triviaHeader {
-	font-family: 'Playfair Display', serif;
 	margin-bottom:35px;
-	text-align: center;
+    text-align: center; 
+ 
+     color: #FDFDFD;
+     text-shadow: 
+    0 1px #808d93,
+    -1px 0 #cdd2d5,
+    -1px 2px #808d93,
+    -2px 1px #cdd2d5,
+    -2px 3px #808d93,
+    -3px 2px #cdd2d5,
+    -3px 4px #808d93,
+    -4px 3px #cdd2d5,
+    -4px 5px #808d93,
+    -5px 4px #cdd2d5,
+    -5px 6px #808d93,
+    -6px 5px #cdd2d5,
+    -6px 7px #808d93,
+    -7px 6px #cdd2d5,
+    -7px 8px #808d93,
+    -8px 7px #cdd2d5;
 }
-
+.gameText,
+.rightAnswerText {
+    font-size: 2em;
+    color: #FDFDFD;
+    text-shadow:  0 1px #808d93,
+    -1px 0 #cdd2d5,
+    -1px 2px #808d93,
+    -2px 1px #cdd2d5,
+    -2px 3px #808d93,
+    -3px 2px #cdd2d5;
+}
 #general {
     background-image: url("../images/general.png");
 }
@@ -62,9 +101,6 @@ body {
 #pol {  
     background-image: url("../images/politics.png");
 }
-/*#art {
-    background-image: url("../images/art.png");
-}*/
 #cel {
     background-image: url("../images/celebrities.png");
 }
@@ -77,44 +113,21 @@ body {
 #entCB {
     background-image: url("../images/comics.png");
 }
-/*#sciGad {
-    background-image: url("../images/gadgets.png");
-}*/
 #jAM {
     background-image: url("../images/anime.png");
 }
 #carAni {
     background-image: url("../images/cartoons.png");
 }
+#moveRight{
+    width: 200px;
+    height: 800px;
+}
+#mainArea {
+    margin-left:20%;
 
-/*#mainArea {
-    width: 457px;
-    height: 517px;
-    position: absolute;
-    left: 415px;
-    top: 24px;
-
-}*/
-.catagoryBtn {
+}
+.categoryBtn {
     width:200px;
     height:67px;
-}
-#startButton {
-    position: relative;
-    bottom: 14px;
-    width: 456px;
-    height: 439px;
-    font-size: 25px;
-    float: left;
-    border-radius: 50%;
-    background-color:#868686;
-    border-width: 0px;
-    background-image: url(../../images/leviathanTop.png);
-    font-family: 'Playfair Display', serif;
-}
-#startText {
-	position: absolute;
-    top: 539px;
-    left: 112px;
-    font-size: 19px;
 }
