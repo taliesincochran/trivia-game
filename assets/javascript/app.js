@@ -258,6 +258,7 @@ var game = {
 		$("#feedback").removeClass('hidden');
 		game.playerSkipped++;
 		$("#correctIncorrect").text("out of time.");
+		setTimeout(game.nextQuestion,3500);
 	},
 //if answer is right, shows this
 	"correctScreen": function () {
