@@ -14,14 +14,8 @@ body {
         -1px 2px #808d93,
         -2px 1px #cdd2d5;
 }
-
 .hidden {
 	display:none;
-}
-.floatRight {
-	float: right;
-	position: relative;
-	bottom:67px;
 }
 .triviaHeader {
     text-align: center; 
@@ -97,6 +91,10 @@ body {
     margin-left:20%;
     margin-right: 20%;
 }
+.answerBtn {
+    margin-bottom:5px;
+    border-radius: 20px;
+}
 .categoryBtn {
     width:200px;
     height:67px;
@@ -129,7 +127,7 @@ body {
     }
     .answerBtn {
     width: 60%;
-}
+    }
 }
 @media screen and (max-width: 780px) {
 
@@ -198,5 +196,6 @@ body {
     }
     .answerBtn {
     width: 100%;
+    margin-bottom:5px;
 }
 }

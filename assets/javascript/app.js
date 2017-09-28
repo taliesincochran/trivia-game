@@ -87,7 +87,6 @@ var game = {
 		},
 	},
 	//variables used throughout game
-	"isRunning":false,
 	"intID": undefined,
 	"difficultyChoosen": undefined,
 	"categoryChoosen": undefined,
@@ -105,6 +104,13 @@ var game = {
 	"playerSkipped":0,
 	"response":undefined,
 	"queryURL":"",
+	//flags to prevent doubling on restart
+	"isRunning":false,
+	"catChoosen":false,
+	"difChoosen":false,
+	"getQuestionsCalled":false,
+	"currentQuestionCalled":false,
+	"nextQuestionCalled":false,
 //restarts timer
 	"startInt": function() {
 		console.log("toggleInt has been called");
@@ -136,92 +142,106 @@ var game = {
 
 //Functions to get query, first category, then diffigulty, then the ajax request
 	"choosecategory": function() {
-		console.log("chooseCategory has been called");
-		$(".categoryBtn").on("click", function() {
-			game.categoryChoosen = this.id;
-			game.categoryName = game.triviaCategories[game.categoryChoosen].name;
-			game.categoryNumber = game.triviaCategories[game.categoryChoosen].number;
-			$("#category").addClass("hidden");
-			$("#difficulty").removeClass("hidden");
-			if(game.categoryChoosen == "entBG") {
-				$("#hard").addClass("hidden");
-				$("#medium").addClass("hidden");
-			} else if (game.categoryChoosen == "myth" || game.categoryChoosen == "sport" || game.categoryChoosen == "carAni") {
-				$("#hard").addClass("hidden");
-			} else if (game.categoryChoosen == "ani") {
-				$("#easy").addClass("hidden");
-			} else if (game.categoryChoosen == "sciMath" || game.categoryChoosen == "pol" || game.categoryChoosen == "cel"   || game.categoryChoosen == "entCB") {
-				$("#hard").addClass("hidden");
-				$("#easy").addClass("hidden");
-			}
-			$(".dispCat").html(game.categoryName);
-			game.chooseDifficulty();
-			
-		})
+		if(!game.catChoosen) {
+			game.catChoosen = true;	
+			console.log("chooseCategory has been called");
+			$(".categoryBtn").on("click", function() {
+				game.categoryChoosen = this.id;
+				game.categoryName = game.triviaCategories[game.categoryChoosen].name;
+				game.categoryNumber = game.triviaCategories[game.categoryChoosen].number;
+				$("#category").addClass("hidden");
+				$("#difficulty").removeClass("hidden");
+				if(game.categoryChoosen == "entBG") {
+					$("#hard").addClass("hidden");
+					$("#medium").addClass("hidden");
+				} else if (game.categoryChoosen == "myth" || game.categoryChoosen == "sport" || game.categoryChoosen == "carAni") {
+					$("#hard").addClass("hidden");
+				} else if (game.categoryChoosen == "ani") {
+					$("#easy").addClass("hidden");
+				} else if (game.categoryChoosen == "sciMath" || game.categoryChoosen == "pol" || game.categoryChoosen == "cel"   || game.categoryChoosen == "entCB") {
+					$("#hard").addClass("hidden");
+					$("#easy").addClass("hidden");
+				}
+				$(".dispCat").html(game.categoryName);
+				game.chooseDifficulty();
+							
+			})
+		}
 	},
 	"chooseDifficulty": function() {
-		console.log("chooseDifficulty has been called");
-		$(".difficultyBtn").on("click", function() {
-			game.difficultyChoosen = this.id;
-		//uses selection to create the url to get the questions from the api
-			game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
-			$("#difficulty").addClass("hidden");
-			$("#main").removeClass("hidden");
-			game.getQuestion();
-		})
+		if(!game.difChoosen) {
+			game.difChoosen = true;	
+			console.log("chooseDifficulty has been called");
+			$(".difficultyBtn").on("click", function() {
+				game.difficultyChoosen = this.id;
+			//uses selection to create the url to get the questions from the api
+				game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
+				$("#difficulty").addClass("hidden");
+				$("#main").removeClass("hidden");
+				game.getQuestion();
+				
+			})
+		}
 	},	
 	"getQuestion": function() {
-		console.log("getQuestion has been called");
-	//Gets a random list of questions in an object and sets them to a local object
-		$.ajax({
-		url : game.queryURL,
-		method: "GET"
-		}).done(function(response) {
-			game.response = response;
-			console.log(game.response);
-			game.getCurrentQuestion();
-		})
-
+		if (!game.getQuestionsCalled) {
+			game.getQuestionsCalled = true;
+			console.log("getQuestion has been called");
+		//Gets a random list of questions in an object and sets them to a local object
+			$.ajax({
+			url : game.queryURL,
+			method: "GET"
+			}).done(function(response) {
+				game.response = response;
+				console.log(game.response);
+				game.getCurrentQuestion();
+			})
+		}
 	},
 
 
 //Function that changes question, questions are stored locally after ajax request
 	"getCurrentQuestion" : function() {
-	//In order for time display to be right at the load of the page
-		console.log("getCurrentQuestion has been called");
-		$('.timeDisp').text('30');
-		$("#currentQuestion").html(game.response.results[game.questionNumber].question);
-	//array of possible incorrect answer, then adds correct answer at a random place
-		var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
-		var correctPlace = Math.floor(Math.random()*4);
-		game.correctAnswer= game.response.results[game.questionNumber].correct_answer;
-		if (correctPlace=0) {
-			game.correctBtn = "button0";
-		} else if (correctPlace = 1) {
-			game.correctBtn = "button1"
-		} else if (correctPlace = 2) {
-			game.correctBtn = "button2";
-		} else {
-			game.correctBtn = "button3";
+		if(!game.currentQuestionCalled) {
+			game.currentQuestionCalled=true;
+			game.nextQuestionCalled = false;
+		//In order for time display to be right at the load of the page
+			console.log("getCurrentQuestion has been called");
+			$('.timeDisp').text('30');
+			$("#currentQuestion").html(game.response.results[game.questionNumber].question);
+		//array of possible incorrect answer, then adds correct answer at a random place
+			var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
+			var correctPlace = Math.floor(Math.random()*4);
+			game.correctAnswer= game.response.results[game.questionNumber].correct_answer;
+			if (correctPlace=0) {
+				game.correctBtn = "button0";
+			} else if (correctPlace = 1) {
+				game.correctBtn = "button1"
+			} else if (correctPlace = 2) {
+				game.correctBtn = "button2";
+			} else {
+				game.correctBtn = "button3";
+			}
+			possible.splice(correctPlace,0,game.correctAnswer);
+			$("#answer0").html(possible[0]);
+			$("#answer1").html(possible[1]);
+			$("#answer2").html(possible[2]);
+			$("#answer3").html(possible[3]);	
+			console.log("timerOn");
+			game.startInt();
+			game.checkAnswer();
+			
 		}
-		possible.splice(correctPlace,0,game.correctAnswer);
-		$("#answer0").html(possible[0]);
-		$("#answer1").html(possible[1]);
-		$("#answer2").html(possible[2]);
-		$("#answer3").html(possible[3]);	
-		console.log("timerOn");
-		game.startInt();
 	},	
 //Function that checks if answer is correct or not
-	"checkAnswer": function() {
+	"checkAnswer": function() {		
 		$(".answerBtn").on('click', function() {
 			console.log("checkAnswer has been called");
 		//stops timer on answer
-			console.log("timerOff");
+		console.log("timerOff");
 			game.stopInt();
 			game.questionNumber++;
-			console.log("added 1 to questionNumber")	
-			
+			console.log("added 1 to questionNumber")		
 		//if answer is correct...
 			if (this.id == game.correctBtn) {
 				game.correctScreen();
@@ -236,6 +256,38 @@ var game = {
 				console.log(game.playerWrong);
 			}
 		})
+	},
+	//goes to next question or end screen
+	"nextQuestion": function () {
+		if(!game.nextQuestionCalled) {
+			game.currentQuestionCalled = false;
+			game.nextQuestionCalled = true;
+			console.log("nextQuestion has been called");
+		//game continues if less than 10 questions have been answered
+			if(game.questionNumber < 10) {			
+			//resets game variables and html that display and hold questions and answers
+				game.correctAnswer = undefined;
+				game.correctBtn = undefined;
+				$("#rightAnswer").empty();
+				$("#currentQuestion").empty();
+				$("#answer0").empty();
+				$("#answer1").empty();
+				$("#answer2").empty();
+				$("#answer3").empty();
+				game.getCurrentQuestion();
+				$("#main").removeClass('hidden');
+				$("#feedback").addClass('hidden');
+				game.timerCount = 30;
+			} else {
+				$("#feedback").addClass('hidden');
+				console.log("timerOff");
+				game.stopInt();
+				$("#finalScreen").removeClass('hidden');
+				game.update();
+				game.restartCalled=false;
+				game.restart();
+			}
+		}
 	},
 //updates feedback and final screen
 	"update": function () {
@@ -281,35 +333,9 @@ var game = {
 		//to prevent timer from displaying incorrectly as page loads
 		setTimeout(game.nextQuestion,4000);
 	},
-//goes to next question or end screen
-	"nextQuestion": function () {
-		console.log("nextQuestion has been called");
-	//game continues if less than 10 questions have been answered
-		if(game.questionNumber < 10) {			
-		//resets game variables and html that display and hold questions and answers
-			game.correctAnswer = undefined;
-			game.correctBtn = undefined;
-			$("#rightAnswer").empty();
-			$("#currentQuestion").empty();
-			$("#answer0").empty();
-			$("#answer1").empty();
-			$("#answer2").empty();
-			$("#answer3").empty();
-			game.getCurrentQuestion();
-			$("#main").removeClass('hidden');
-			$("#feedback").addClass('hidden');
-			game.timerCount = 30;
-		} else {
-			$("#feedback").addClass('hidden');
-			console.log("timerOff");
-			game.stopInt();
-			$("#finalScreen").removeClass('hidden');
-			game.update();
-			game.reset();
-		}
-	},
+
 //if reset button is pressed on end screen, resets variables
-	"reset": function () {	
+	"restart": function () {	
 		$("#restart").on("click", function () {
 			console.log("reset has been called");
 			game.toggeInt;
@@ -322,6 +348,13 @@ var game = {
 			$("#answer2").empty();
 			$("#answer3").empty();
 			game.isRunning = false;
+			game.catChoosen=false;
+			game.difChoosen=false,
+			game.getQuestionsCalled=false;
+			game.currentQuestionCalled=false;
+			game.answerCheckedCalled=false;
+			game.restartCalled=false;
+			game.nextQuestionCalled=false;
 			game.difficultyChoosen = undefined;
 			game.categoryChoosen = undefined;
 			game.categoryNumber= undefined;
@@ -338,10 +371,11 @@ var game = {
 			game.playerSkipped= 0;
 			game.totalTime=0;
 		})
-	},
+	}
+
 }
 
 //starts game
 game.choosecategory();
-game.checkAnswer();
+
 
