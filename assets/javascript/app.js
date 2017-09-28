@@ -87,7 +87,7 @@ var game = {
 		},
 	},
 	//variables used throughout game
-	"stop":true,
+	"isRunning":false,
 	"intID": undefined,
 	"difficultyChoosen": undefined,
 	"categoryChoosen": undefined,
@@ -103,32 +103,32 @@ var game = {
 	"playerRight":0,
 	"playerWrong":0,
 	"playerSkipped":0,
-	"totalTime": 0,
 	"response":undefined,
 	"queryURL":"",
 //restarts timer
-	"toggleInt": function() {
-		if(!game.stop) {
+	"startInt": function() {
+		console.log("toggleInt has been called");
+		if(!game.isRunning) {
 			game.intID = setInterval(game.setTimer,1000);
+			game.isRunning = true;
 		}
-		else if (game.stop){
+	},
+	"stopInt": function () {
 			clearInterval(game.intID);
-		}
+			game.isRunning = false;
 	},
 
 //Used count down interval to display time and what to do when it hits zero
 	"setTimer": function() {
-		
-		 if (!game.stop) {
-			game.timerCount--;
-		}
+		game.timerCount--;
+			console.log('on');
 		if (game.timerCount >= 0) {
 			$(".timeDisp").text(game.timerCount);
 	
 		} else if (game.timerCount < 0) {
 			$(".timeDisp").text("0");
 		}
-		if (game.timerCount === 0 && !game.stop) {
+		if (game.timerCount === 0) {
 			game.skippedQuestion();
 		}
 	},
@@ -136,6 +136,7 @@ var game = {
 
 //Functions to get query, first category, then diffigulty, then the ajax request
 	"choosecategory": function() {
+		console.log("chooseCategory has been called");
 		$(".categoryBtn").on("click", function() {
 			game.categoryChoosen = this.id;
 			game.categoryName = game.triviaCategories[game.categoryChoosen].name;
@@ -159,6 +160,7 @@ var game = {
 		})
 	},
 	"chooseDifficulty": function() {
+		console.log("chooseDifficulty has been called");
 		$(".difficultyBtn").on("click", function() {
 			game.difficultyChoosen = this.id;
 		//uses selection to create the url to get the questions from the api
@@ -169,6 +171,7 @@ var game = {
 		})
 	},	
 	"getQuestion": function() {
+		console.log("getQuestion has been called");
 	//Gets a random list of questions in an object and sets them to a local object
 		$.ajax({
 		url : game.queryURL,
@@ -185,6 +188,7 @@ var game = {
 //Function that changes question, questions are stored locally after ajax request
 	"getCurrentQuestion" : function() {
 	//In order for time display to be right at the load of the page
+		console.log("getCurrentQuestion has been called");
 		$('.timeDisp').text('30');
 		$("#currentQuestion").html(game.response.results[game.questionNumber].question);
 	//array of possible incorrect answer, then adds correct answer at a random place
@@ -205,17 +209,19 @@ var game = {
 		$("#answer1").html(possible[1]);
 		$("#answer2").html(possible[2]);
 		$("#answer3").html(possible[3]);	
-		game.stop=false;
-		game.toggleInt();
-		game.questionNumber++;	
+		console.log("timerOn");
+		game.startInt();
 	},	
 //Function that checks if answer is correct or not
 	"checkAnswer": function() {
 		$(".answerBtn").on('click', function() {
+			console.log("checkAnswer has been called");
 		//stops timer on answer
-			game.stop=true;
-			game.toggleInt();
-			game.totalTime = game.totalTime +30 - game.timerCount;
+			console.log("timerOff");
+			game.stopInt();
+			game.questionNumber++;
+			console.log("added 1 to questionNumber")	
+			
 		//if answer is correct...
 			if (this.id == game.correctBtn) {
 				game.correctScreen();
@@ -233,6 +239,7 @@ var game = {
 	},
 //updates feedback and final screen
 	"update": function () {
+		console.log("update has been called");
 		$(".numberRight").text(game.playerRight);
 		$('.numberWrong').text(game.playerWrong);
 		$('.numberSkipped').text(game.playerSkipped);
@@ -243,9 +250,10 @@ var game = {
 	},
 //if timer runs out on a question	
 	"skippedQuestion": function() {
-		game.stop=true;
-		game.toggleInt();
-		game.totalTime = game.totalTime +30 - game.timerCount;
+		console.log("skippedQuestion has been called");
+		console.log("timerOff");
+		game.stopInt();
+		
 		game.rightAnswer();
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');
@@ -256,6 +264,7 @@ var game = {
 	},
 //if answer is right, shows this
 	"correctScreen": function () {
+		console.log("correctScreen has been called");
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');
 		game.rightAnswer();			
@@ -264,16 +273,17 @@ var game = {
 	},
 //if answer is wrong, shows this
 	"incorrectScreen": function () {
+		console.log("incorrectScreen has been called");
 		$("#correctIncorrect").text("incorrect.");
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');		
-		console.log(game.playerWrong, game.questionNumber)
 		setTimeout(game.rightAnswer, 500);
 		//to prevent timer from displaying incorrectly as page loads
 		setTimeout(game.nextQuestion,4000);
 	},
 //goes to next question or end screen
 	"nextQuestion": function () {
+		console.log("nextQuestion has been called");
 	//game continues if less than 10 questions have been answered
 		if(game.questionNumber < 10) {			
 		//resets game variables and html that display and hold questions and answers
@@ -291,16 +301,18 @@ var game = {
 			game.timerCount = 30;
 		} else {
 			$("#feedback").addClass('hidden');
-			$("#totalTime").text(game.totalTime);
-			game.stop=true;
-			game.toggleInt();
+			console.log("timerOff");
+			game.stopInt();
 			$("#finalScreen").removeClass('hidden');
 			game.update();
+			game.reset();
 		}
 	},
 //if reset button is pressed on end screen, resets variables
 	"reset": function () {	
 		$("#restart").on("click", function () {
+			console.log("reset has been called");
+			game.toggeInt;
 			$('#category').removeClass("hidden");
 			$("#finalScreen").addClass('hidden');
 			$("#currentQuestion").empty();
@@ -309,6 +321,7 @@ var game = {
 			$("#answer1").empty();
 			$("#answer2").empty();
 			$("#answer3").empty();
+			game.isRunning = false;
 			game.difficultyChoosen = undefined;
 			game.categoryChoosen = undefined;
 			game.categoryNumber= undefined;
@@ -331,5 +344,4 @@ var game = {
 //starts game
 game.choosecategory();
 game.checkAnswer();
-game.reset();
 

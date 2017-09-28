@@ -14,6 +14,7 @@ body {
         -1px 2px #808d93,
         -2px 1px #cdd2d5;
 }
+
 .hidden {
 	display:none;
 }
@@ -23,7 +24,6 @@ body {
 	bottom:67px;
 }
 .triviaHeader {
-	margin-bottom:35px;
     text-align: center; 
     color:#fdfdfd;
 }
@@ -103,6 +103,7 @@ body {
 }
 @media screen and (min-width: 781px) {
     .triviaHeader {
+        margin-bottom:35px;
         font-size: 2.5em;
         text-shadow: 
             0 1px #808d93,
@@ -126,10 +127,14 @@ body {
     margin-left:30%;
     margin-right: 30%;
     }
+    .answerBtn {
+    width: 60%;
+}
 }
 @media screen and (max-width: 780px) {
 
     .triviaHeader {
+        margin-bottom:20px;
         font-size: 2em;
         text-shadow: 
             0 1px #808d93,
@@ -152,11 +157,17 @@ body {
     #mainArea {
     margin-left:25%;
     margin-right: 25%;
-}
-
+    }
+    .answerBtn {
+    width: 80%;
+    }
 }
 @media screen and (max-width: 640px) {
+    body {
+        font-size: 1.5em;
+    }
     .triviaHeader {
+        margin-bottom:15px;
         font-size: 1.75em;
         text-shadow:  
                 0 1px #808d93,
@@ -168,6 +179,7 @@ body {
     }
 
     .gameText {
+        font-size:1.25em;
         text-shadow:  
                 0 1px #808d93,
                 -1px 0 #cdd2d5;
@@ -182,6 +194,9 @@ body {
     margin-right: 20%;
     }
     answerBtnText {
-        font-size: 2em;
+        font-size: 1.5em;
     }
+    .answerBtn {
+    width: 100%;
+}
 }

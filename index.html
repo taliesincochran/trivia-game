@@ -37,32 +37,29 @@
 			<button	class="categoryBtn"	id="carAni"></button>
 		</div>
 		<div id="difficulty" class="hidden">
-			<h2 class="triviaHeader">category: <span class="dispCat triviaHeader"></span></h2>
+			<h2 class="triviaHeader">Category: <span class="dispCat"></span></h2>
 			<h2 class="gameText">Choose Your Difficulty Level</h2>
-			<button class="difficultyBtn" id="easy" class="answerBtnText">Easy</button>
-			<button class="difficultyBtn" id="medium" class="answerBtnText">Medium</button>
-			<button class="difficultyBtn" id="hard" class="answerBtnText">Hard</button>
+			<button class="difficultyBtn" id="easy">Easy</button>
+			<button class="difficultyBtn" id="medium">Medium</button>
+			<button class="difficultyBtn" id="hard">Hard</button>
 		</div>
 	<!-- Screen for questions -->
 		<div class="hidden" id="main">
-			<h2 class= "triviaHeader">Trivia Game</h2>
-			<h2 class="triviaHeader">Category: <span class="dispCat triviaHeader"></span></h2>
-			<h2 class="triviaHeader">Time Remaining: <span  class="triviaHeader timeDisp">30</span> seconds</h2>
+			<h2 class="triviaHeader">Category: <span class="dispCat"></span></h2>
+			<h2 class="gameText">Time Remaining: <span  class="timeDisp">30</span> seconds</h2>
 			<div id="question">
 				<span id="currentQuestion" class="gameText"></span>
 			</div>
 			<div id="answers">
-				<button class="answerBtn" id="button0" class="answerBtnText"><span id="answer0">1</span></button> 
-				<button class="answerBtn" id="button1" class="answerBtnText"><span id="answer1">2</span></button> 
-				<button class="answerBtn" id="button2" class="answerBtnText"><span id="answer2">3</span></button>
-				<button class="answerBtn" id="button3" class="answerBtnText"><span id="answer3">4</span></button> 
+				<button class="answerBtn" id="button0"><span id="answer0" class="answerBtnText">1</span></button> 
+				<button class="answerBtn" id="button1"><span id="answer1" class="answerBtnText">2</span></button> 
+				<button class="answerBtn" id="button2"><span id="answer2" class="answerBtnText">3</span></button>
+				<button class="answerBtn" id="button3"><span id="answer3" class="answerBtnText">4</span></button> 
 			</div>
 		</div>
 		<!-- Screen for results between questions -->
 		<div class="hidden" id="feedback">
-			<h2 class= "triviaHeader">Trivia Game</h2>
-			<h2 class="triviaHeader">Category: <span class="dispCat triviaHeader"></span></h2>
-			<h2 class="triviaHeader">Time Remaining: <span  class="triviaHeader timeDisp"></span> seconds</h2>
+			<h2 class="gameText">Time Remaining: <span  class="timeDisp"></span> seconds</h2>
 			<h2 class= "gameText" id="result">You are <span id="correctIncorrect" class="gameText"></span></h2>
 			<h2 class= "gameText">The right answer was <span id="rightAnswer" class="gameText"></span></h2>
 			<p class="gameText">Right Answers: <span class="numberRight">0</span></p>
@@ -71,14 +68,11 @@
 		</div>
 		<!-- final screen and restart button -->
 		<div id="finalScreen" class="hidden">
-			<h2 class= "triviaHeader">Trivia Game</h2>
-			<h2 class="triviaHeader">Category: <span class="dispCat triviaHeader"></span></h2>
-			<h2 class="gameText">Time Remaining: <span class="timeDisp gameText"></span> seconds</h2>
+			<h2 class="gameText">Time Remaining: <span class="timeDisp"></span> seconds</h2>
 			<h2 class="gameText">Results</h2>
 			<p class="gameText">Right Answers: <span class="numberRight">0</span></p>
 			<p class="gameText">Wrong Answers: <span class="numberWrong">0</span></p>
 			<p class="gameText">Unanswered: <span class="numberSkipped"></span></p>
-			<p class="gameText">Total Time: <span id="totalTime"></span></p>
 			<button class="btn" id="restart">Restart</button>
 		</div>
 	</div>
