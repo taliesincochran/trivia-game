@@ -87,7 +87,7 @@ var game = {
 		},
 	},
 	//variables used throughout game
-	"stop":false,
+	"stop":true,
 	"intID": undefined,
 	"difficultyChoosen": undefined,
 	"categoryChoosen": undefined,
@@ -100,41 +100,39 @@ var game = {
 	"timerCount":30,
 	//tracks game progress and number of wins
 	"questionNumber": 0,
-	"winCounter":0,
 	"playerRight":0,
 	"playerWrong":0,
 	"playerSkipped":0,
+	"totalTime": 0,
 	"response":undefined,
 	"queryURL":"",
 //restarts timer
-	"startInt": function() {
-		game.intID = setInterval(game.setTimer,1000);
-	},
-//Stops timer
-	"stopInt": function () {
-		clearInterval(game.intID);
+	"toggleInt": function() {
+		if(!game.stop) {
+			game.intID = setInterval(game.setTimer,1000);
+		}
+		else if (game.stop){
+			clearInterval(game.intID);
+		}
 	},
 
 //Used count down interval to display time and what to do when it hits zero
 	"setTimer": function() {
-		game.timerCount--;
-		if (game.timerCount >= 0 && !game.stop) {
-			$("#timeDisp").text(game.timerCount);
-			$("#timeDisp2").text(game.timerCount);
-			$("#timeDisp3").text(game.timerCount);
-		} else if (game.timerCount < 0) {
-			$("#timeDisp").text("0");
-			$("#timeDisp2").text("0");
-			$("#timeDisp3").text("0");
-		} else {
-			$("#timeDisp").text(game.finalTime);
-			$("#timeDisp2").text(game.finalTime);
-			$("#timeDisp3").text(game.finalTime);
+		
+		 if (!game.stop) {
+			game.timerCount--;
 		}
-		if (game.timerCount === 0) {
+		if (game.timerCount >= 0) {
+			$(".timeDisp").text(game.timerCount);
+	
+		} else if (game.timerCount < 0) {
+			$(".timeDisp").text("0");
+		}
+		if (game.timerCount === 0 && !game.stop) {
 			game.skippedQuestion();
 		}
 	},
+	
 
 //Functions to get query, first category, then diffigulty, then the ajax request
 	"choosecategory": function() {
@@ -155,8 +153,6 @@ var game = {
 				$("#hard").addClass("hidden");
 				$("#easy").addClass("hidden");
 			}
-			console.log(game.categoryChoosen);
-			console.log(game.categoryName);
 			$(".dispCat").html(game.categoryName);
 			game.chooseDifficulty();
 			
@@ -165,11 +161,8 @@ var game = {
 	"chooseDifficulty": function() {
 		$(".difficultyBtn").on("click", function() {
 			game.difficultyChoosen = this.id;
-			// $(".dispCat").html(game.categoryName);
-			console.log(this);
-			console.log(game.categoryNumber, game.categoryName, game.categoryChoosen);
+		//uses selection to create the url to get the questions from the api
 			game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
-			console.log(game.queryURL);
 			$("#difficulty").addClass("hidden");
 			$("#main").removeClass("hidden");
 			game.getQuestion();
@@ -188,12 +181,13 @@ var game = {
 
 	},
 
+
 //Function that changes question, questions are stored locally after ajax request
 	"getCurrentQuestion" : function() {
-	//to prevent timer from displaying incorrectly as page loads
-		$("#timeDisp").text("30");
+	//In order for time display to be right at the load of the page
+		$('.timeDisp').text('30');
 		$("#currentQuestion").html(game.response.results[game.questionNumber].question);
-		//array of possible incorrect answer, then adds correct answer at a random place
+	//array of possible incorrect answer, then adds correct answer at a random place
 		var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
 		var correctPlace = Math.floor(Math.random()*4);
 		game.correctAnswer= game.response.results[game.questionNumber].correct_answer;
@@ -206,26 +200,22 @@ var game = {
 		} else {
 			game.correctBtn = "button3";
 		}
-		console.log(game.response.results[game.questionNumber].correct_answer);
 		possible.splice(correctPlace,0,game.correctAnswer);
-		console.log(possible);
 		$("#answer0").html(possible[0]);
 		$("#answer1").html(possible[1]);
 		$("#answer2").html(possible[2]);
 		$("#answer3").html(possible[3]);	
-		game.startInt();
+		game.stop=false;
+		game.toggleInt();
 		game.questionNumber++;	
 	},	
-
 //Function that checks if answer is correct or not
 	"checkAnswer": function() {
 		$(".answerBtn").on('click', function() {
 		//stops timer on answer
-			game.stopInt();
-		//allows time when question is answered to be displayed as timer is reset
-			game.finalTime= game.timerCount;
-			game.setTimer();
-			game.timerCount = 30;
+			game.stop=true;
+			game.toggleInt();
+			game.totalTime = game.totalTime +30 - game.timerCount;
 		//if answer is correct...
 			if (this.id == game.correctBtn) {
 				game.correctScreen();
@@ -253,12 +243,16 @@ var game = {
 	},
 //if timer runs out on a question	
 	"skippedQuestion": function() {
+		game.stop=true;
+		game.toggleInt();
+		game.totalTime = game.totalTime +30 - game.timerCount;
 		game.rightAnswer();
 		$("#main").addClass('hidden');
 		$("#feedback").removeClass('hidden');
 		game.playerSkipped++;
 		$("#correctIncorrect").text("out of time.");
-		setTimeout(game.nextQuestion,3500);
+		setTimeout(game.rightAnswer, 500);
+		setTimeout(game.nextQuestion,4000);
 	},
 //if answer is right, shows this
 	"correctScreen": function () {
@@ -266,7 +260,7 @@ var game = {
 		$("#feedback").removeClass('hidden');
 		game.rightAnswer();			
 		$("#correctIncorrect").text("correct");
-		setTimeout(game.nextQuestion,3500);
+		setTimeout(game.nextQuestion,4000);
 	},
 //if answer is wrong, shows this
 	"incorrectScreen": function () {
@@ -275,7 +269,8 @@ var game = {
 		$("#feedback").removeClass('hidden');		
 		console.log(game.playerWrong, game.questionNumber)
 		setTimeout(game.rightAnswer, 500);
-		setTimeout(game.nextQuestion,2500);
+		//to prevent timer from displaying incorrectly as page loads
+		setTimeout(game.nextQuestion,4000);
 	},
 //goes to next question or end screen
 	"nextQuestion": function () {
@@ -284,7 +279,6 @@ var game = {
 		//resets game variables and html that display and hold questions and answers
 			game.correctAnswer = undefined;
 			game.correctBtn = undefined;
-			game.stop=false;
 			$("#rightAnswer").empty();
 			$("#currentQuestion").empty();
 			$("#answer0").empty();
@@ -297,7 +291,9 @@ var game = {
 			game.timerCount = 30;
 		} else {
 			$("#feedback").addClass('hidden');
-			clearInterval(game.intID);
+			$("#totalTime").text(game.totalTime);
+			game.stop=true;
+			game.toggleInt();
 			$("#finalScreen").removeClass('hidden');
 			game.update();
 		}
@@ -313,7 +309,6 @@ var game = {
 			$("#answer1").empty();
 			$("#answer2").empty();
 			$("#answer3").empty();
-			game.stop =false;
 			game.difficultyChoosen = undefined;
 			game.categoryChoosen = undefined;
 			game.categoryNumber= undefined;
@@ -328,6 +323,7 @@ var game = {
 			game.playerRight =0;
 			game.playerWrong= 0;
 			game.playerSkipped= 0;
+			game.totalTime=0;
 		})
 	},
 }

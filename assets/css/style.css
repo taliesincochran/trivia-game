@@ -4,15 +4,15 @@ body {
 	position:relative;
     background-repeat: no-repeat;
     background-color: black;
+    background-attachment: fixed;
     text-align: center;
     font-family: 'Encode Sans Expanded', sans-serif;
     font-weight: bold;
-    text-shadow:     0 1px #808d93,
+    text-shadow:     
+        0 1px #808d93,
         -1px 0 #cdd2d5,
         -1px 2px #808d93,
-        -2px 1px #cdd2d5,
-        -2px 3px #808d93,
-        -3px 2px #cdd2d5;
+        -2px 1px #cdd2d5;
 }
 .hidden {
 	display:none;
@@ -25,13 +25,10 @@ body {
 .triviaHeader {
 	margin-bottom:35px;
     text-align: center; 
-    color: #FDFDFD;
-    
+    color:#fdfdfd;
 }
-.gameText,
-.rightAnswerText {
-    color: #FDFDFD;
-    
+.gameText {
+    color:#fdfdfd;
 }
 #general {
     background-image: url("../images/general.png");
@@ -96,69 +93,95 @@ body {
 #carAni {
     background-image: url("../images/cartoons.png");
 }
-#moveRight{
-    width: 200px;
-    height: 800px;
-}
 #mainArea {
     margin-left:20%;
-
+    margin-right: 20%;
 }
 .categoryBtn {
     width:200px;
     height:67px;
 }
-@media screen and (min-width: 641px) {
-    .rightAnswerText,
-    .gameText {
-        font-size: 2em;
-        text-shadow:  0 1px #808d93,
-        -1px 0 #cdd2d5,
-        -1px 2px #808d93,
-        -2px 1px #cdd2d5,
-        -2px 3px #808d93,
-        -3px 2px #cdd2d5;
-
-    }
+@media screen and (min-width: 781px) {
     .triviaHeader {
+        font-size: 2.5em;
         text-shadow: 
-        0 1px #808d93,
-        -1px 0 #cdd2d5,
-        -1px 2px #808d93,
-        -2px 1px #cdd2d5,
-        -2px 3px #808d93,
-        -3px 2px #cdd2d5,
-        -3px 4px #808d93,
-        -4px 3px #cdd2d5,
-        -4px 5px #808d93,
-        -5px 4px #cdd2d5,
-        -5px 6px #808d93,
-        -6px 5px #cdd2d5,
-        -6px 7px #808d93,
-        -7px 6px #cdd2d5,
-        -7px 8px #808d93,
-        -8px 7px #cdd2d5;
-    }
-}
-@media screen and (max-width: 640px) {
-    .triviaHeader {
-        font-size: 1.25em;
-        text-shadow:  
             0 1px #808d93,
             -1px 0 #cdd2d5,
             -1px 2px #808d93,
             -2px 1px #cdd2d5,
             -2px 3px #808d93,
-            -3px 2px #cdd2d5;
+            -3px 2px #cdd2d5,
+            -3px 4px #808d93,
+            -4px 3px #cdd2d5,
+            -4px 5px #808d93,
+            -5px 4px #cdd2d5,
+            -5px 6px #808d93,
+            -6px 5px #cdd2d5,
+            -6px 7px #808d93,
+            -7px 6px #cdd2d5,
+            -7px 8px #808d93,
+            -8px 7px #cdd2d5;
     }
+    #mainArea {
+    margin-left:30%;
+    margin-right: 30%;
+    }
+}
+@media screen and (max-width: 780px) {
 
-    .rightAnswerText,
-    .gameText {
-        font-size: 1.25em;
-        text-shadow:  
+    .triviaHeader {
+        font-size: 2em;
+        text-shadow: 
             0 1px #808d93,
             -1px 0 #cdd2d5,
             -1px 2px #808d93,
-            -2px 1px #cdd2d5;
+            -2px 1px #cdd2d5,
+            -2px 3px #808d93,
+            -3px 2px #cdd2d5,
+            -3px 4px #808d93,
+            -4px 3px #cdd2d5,
+            -4px 5px #808d93,
+            -5px 4px #cdd2d5,
+            -5px 6px #808d93;
+    }
+        .categoryBtn {
+        width: 150px;
+        height: 50px;
+        background-size: 100%;
+    }
+    #mainArea {
+    margin-left:25%;
+    margin-right: 25%;
+}
+
+}
+@media screen and (max-width: 640px) {
+    .triviaHeader {
+        font-size: 1.75em;
+        text-shadow:  
+                0 1px #808d93,
+                -1px 0 #cdd2d5,
+                -1px 2px #808d93,
+                -2px 1px #cdd2d5,
+                -2px 3px #808d93,
+                -3px 2px #cdd2d5,;
+    }
+
+    .gameText {
+        text-shadow:  
+                0 1px #808d93,
+                -1px 0 #cdd2d5;
+    }
+    .categoryBtn {
+        width: 100px;
+        height: 33px;
+        background-size: 100%;
+    }
+    #mainArea {
+    margin-left: 20%;
+    margin-right: 20%;
+    }
+    answerBtnText {
+        font-size: 2em;
     }
 }
