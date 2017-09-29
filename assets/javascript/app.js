@@ -87,6 +87,31 @@ var game = {
 		},
 	},
 	//variables used throughout game
+	"catNameArray": [],
+	"difficultyArray": ["easy","medium","hard"],
+	"buttonArray":["button0","button1","button2","button3"],
+	"feedbackArray":[
+		{ 
+			'text':"You are ",
+			'spanID': "<span id='correctIncorrect' class='gameText'></span>"			
+		},
+		{
+			'text':"The right answer was ",
+			"spanID":"<span id='rightAnswer' class='gameText'></span>"
+		},
+		{
+			'text':'Right Answers ',
+			"spanID":'<span class="numberRight">0</span>'
+		},
+		{
+			'text':"Wrong Answers ",
+			"spanID":'<span class="numberWrong">0</span>'
+		},
+		{
+			'text':"Unanswered ",
+			"spanID":'<span class="numberSkipped">0</span>'
+		},
+	],
 	"intID": undefined,
 	"difficultyChoosen": undefined,
 	"categoryChoosen": undefined,
@@ -106,15 +131,8 @@ var game = {
 	"queryURL":"",
 	//flags to prevent doubling on restart
 	"isRunning":false,
-	"catChoosen":false,
-	"difChoosen":false,
-	"getQuestionsCalled":false,
-	"currentQuestionCalled":false,
-	"nextQuestionCalled":false,
-	"checkAnswerCalled": false,
 //restarts timer
 	"startInt": function() {
-		console.log("toggleInt has been called");
 		if(!game.isRunning) {
 			game.intID = setInterval(game.setTimer,1000);
 			game.isRunning = true;
@@ -128,7 +146,6 @@ var game = {
 //Used count down interval to display time and what to do when it hits zero
 	"setTimer": function() {
 		game.timerCount--;
-			console.log('on');
 		if (game.timerCount >= 0) {
 			$(".timeDisp").text(game.timerCount);
 	
@@ -139,168 +156,180 @@ var game = {
 			game.skippedQuestion();
 		}
 	},
-	
-
-//Functions to get query, first category, then diffigulty, then the ajax request
-	"choosecategory": function() {
-		if(!game.catChoosen) {
-			game.catChoosen = true;	
-			console.log("chooseCategory has been called");
-			$(".categoryBtn").on("click", function() {
-				game.categoryChoosen = this.id;
-				game.categoryName = game.triviaCategories[game.categoryChoosen].name;
-				game.categoryNumber = game.triviaCategories[game.categoryChoosen].number;
-				$("#category").addClass("hidden");
-				$("#difficulty").removeClass("hidden");
-				if(game.categoryChoosen == "entBG") {
-					$("#hard").addClass("hidden");
-					$("#medium").addClass("hidden");
-				} else if (game.categoryChoosen == "myth" || game.categoryChoosen == "sport" || game.categoryChoosen == "carAni") {
-					$("#hard").addClass("hidden");
-				} else if (game.categoryChoosen == "ani") {
-					$("#easy").addClass("hidden");
-				} else if (game.categoryChoosen == "sciMath" || game.categoryChoosen == "pol" || game.categoryChoosen == "cel"   || game.categoryChoosen == "entCB") {
-					$("#hard").addClass("hidden");
-					$("#easy").addClass("hidden");
-				}
-				$(".dispCat").html(game.categoryName);
-				game.chooseDifficulty();
-							
-			})
-		}
+	//if timer runs out on a question	
+	"skippedQuestion": function() {
+		game.stopInt();	
+		game.feedbackDisp();
+		game.update();	
+		setTimeout(game.rightAnswer, 500);		
+		game.playerSkipped++;
+		game.questionNumber++;
+		$("#correctIncorrect").text("out of time.");
+		setTimeout(game.rightAnswer, 500);
+		setTimeout(game.nextQuestion,4000);
 	},
-	"chooseDifficulty": function() {
-		if(!game.difChoosen) {
-			game.difChoosen = true;	
-			console.log("chooseDifficulty has been called");
-			$(".difficultyBtn").on("click", function() {
-				game.difficultyChoosen = this.id;
-			//uses selection to create the url to get the questions from the api
-				game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
-				$("#difficulty").addClass("hidden");
-				$("#main").removeClass("hidden");
-				game.getQuestion();
-				
-			})
+//initial function to start game and make the category buttons
+	"initial": function () {
+		game.catNameArray = Object.getOwnPropertyNames(game.triviaCategories);
+		var h = $("<h1  class='triviaHeader'>")
+			.text("Trivia Game")
+			.appendTo("#mainArea");	
+		var ch =$("<h1 class='gameText'>")
+			.text("Choose your category")
+			.appendTo("#mainArea");
+		for (var i = 0; i < game.catNameArray.length; i++) {
+			var c = $('<button class="categoryBtn">')
+				.attr("id", game.catNameArray[i])
+				.appendTo("#mainArea");
 		}
+		game.choosecategory();
+	},
+// Function to put event handler on category buttons, 
+// once one is choosen it removes them 
+// and it makes the difficulty buttons for the choosen category
+	"choosecategory": function() {
+		$(".categoryBtn").on("click", function() {
+			game.categoryChoosen = this.id;
+			game.categoryName = game.triviaCategories[game.categoryChoosen].name;
+			game.categoryNumber = game.triviaCategories[game.categoryChoosen].number;
+			$("#mainArea").empty();
+			var c = $('<h2 class="triviaHeader">')
+				.text('Category: ' + game.categoryName)
+				.appendTo("#mainArea");				
+			var d = $('<h2 class="gameText">')
+				.text("Choose your difficulty level.")
+				.appendTo("#mainArea");
+			for (var i = 0; i < game.difficultyArray.length; i++) {
+				var d = $('<button>')
+					.attr("class", "difficultyBtn")
+					.attr("id", game.difficultyArray[i]).attr("class", "difficultyBtn")
+					.text(game.difficultyArray[i])
+					.appendTo("#mainArea");		}
+			if(game.categoryChoosen == "entBG") {
+				$("#hard").addClass("hidden");
+				$("#medium").addClass("hidden");
+			} else if (game.categoryChoosen == "myth" || game.categoryChoosen == "sport" || game.categoryChoosen == "carAni") {
+				$("#hard").addClass("hidden");
+			} else if (game.categoryChoosen == "ani") {
+				$("#easy").addClass("hidden");
+			} else if (game.categoryChoosen == "sciMath" || game.categoryChoosen == "pol" || game.categoryChoosen == "cel"   || game.categoryChoosen == "entCB") {
+				$("#hard").addClass("hidden");
+				$("#easy").addClass("hidden");
+			}
+			$(".dispCat").html(game.categoryName);
+			game.chooseDifficulty();
+						
+		})
+	},
+	//adds event handler to difficulty buttons, once clicked removes them, calls ajax function
+	"chooseDifficulty": function() {
+		$(".difficultyBtn").on("click", function() {
+			game.difficultyChoosen = this.id;
+			$('#mainArea').empty();
+			//uses selection to create the url to get the questions from the api
+			game.queryURL = "https://opentdb.com/api.php?amount=10&category=" + game.categoryNumber + "&difficulty=" + game.difficultyChoosen + '&type=multiple'; 
+			game.getQuestion();
+			
+		})
+		
 	},	
 	"getQuestion": function() {
-		if (!game.getQuestionsCalled) {
-			game.getQuestionsCalled = true;
-			console.log("getQuestion has been called");
-		//Gets a random list of questions in an object and sets them to a local object
-			$.ajax({
+	//Gets a random list of questions in an object and sets them to a local object
+		$.ajax({
 			url : game.queryURL,
 			method: "GET"
 			}).done(function(response) {
 				game.response = response;
-				console.log(game.response);
 				game.getCurrentQuestion();
-			})
-		}
+		})		
 	},
-
-
-//Function that changes question, questions are stored locally after ajax request
+//Function that changes question, makes question buttons
 	"getCurrentQuestion" : function() {
-		if(!game.currentQuestionCalled) {
-			game.currentQuestionCalled = true;
-			game.checkAnswerCalled = false;
-			game.nextQuestionCalled = false;
-			game.skippedQuestionCalled = false;
 		//In order for time display to be right at the load of the page
-			console.log("getCurrentQuestion has been called");
-			$('.timeDisp').text('30');
-			$("#currentQuestion").html(game.response.results[game.questionNumber].question);
+		var c = $('<h2 class="triviaHeader">')
+			.html('Category: ' + game.categoryName)
+			.appendTo("#mainArea");	
+		var t = $("<div>")
+			.html("<h2 class='gameText'>Time Remaining: <span  class='timeDisp'>30</span> seconds</h2>")
+			.appendTo("#mainArea");
+		var q = $("<h3 class='gameText'>")
+			.attr("id", 'currentQuestion')
+			.html(game.response.results[game.questionNumber].question)
+			.appendTo("#mainArea");
 		//array of possible incorrect answer, then adds correct answer at a random place
-			var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
-			var correctPlace = Math.floor(Math.random()*4);
+		var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
+		var correctPlace = Math.floor(Math.random()*4);
 			game.correctAnswer= game.response.results[game.questionNumber].correct_answer;
-			if (correctPlace=0) {
-				game.correctBtn = "button0";
-			} else if (correctPlace = 1) {
-				game.correctBtn = "button1"
-			} else if (correctPlace = 2) {
-				game.correctBtn = "button2";
-			} else {
-				game.correctBtn = "button3";
-			}
-			possible.splice(correctPlace,0,game.correctAnswer);
-			$("#answer0").html(possible[0]);
-			$("#answer1").html(possible[1]);
-			$("#answer2").html(possible[2]);
-			$("#answer3").html(possible[3]);	
-			console.log("timerOn");
-			game.startInt();
-			game.checkAnswer();
-			
+		if (correctPlace === 0) {
+			game.correctBtn === "button0";
+		} else if (correctPlace === 1) {
+			game.correctBtn = "button1"
+		} else if (correctPlace === 2) {
+			game.correctBtn = "button2";
+		} else {
+			game.correctBtn = "button3";
 		}
+		possible.splice(correctPlace,0,game.correctAnswer);
+		possible.pop();
+		for (var i = 0; i < game.buttonArray.length; i++) {
+			var a = $("<button class='answerBtn'>")
+				.attr("id", game.buttonArray[i])
+				.html(possible[i])
+				.appendTo("#mainArea");
+		}
+		game.startInt();
+		game.checkAnswer();
 	},	
 //Function that checks if answer is correct or not
 	"checkAnswer": function() {		
 		$(".answerBtn").on('click', function() {
-			if (!game.checkAnswerCalled) {
-				game.checkAnswerCalled = true;
-				console.log("checkAnswer has been called");
-				//stops timer on answer
-				console.log("timerOff");
-				game.stopInt();
-				game.questionNumber++;
-				console.log("Question Number", game.questionNumber)		
-				//if answer is correct...
-				if (this.id == game.correctBtn) {
-					game.correctScreen();
-					console.log
-					game.playerRight++;
-					console.log("number right", game.playerRight);
-					game.update();
-					console.log(game.playerRight);
-				//if answer is incorrect...
-				} else {
-					game.incorrectScreen();
-					game.playerWrong++;
-					game.update();
-					console.log("number wrong", game.playerWrong);
-				}
-				
+			//stops timer on answer
+			game.stopInt();
+			game.questionNumber++;
+			$("#mainArea").empty();	
+			var c = $('<h2 class="triviaHeader">')
+			.html('Category: ' + game.categoryName)
+			.appendTo("#mainArea");	
+			var t = $("<div>")
+				.html("<h2 class='gameText'>Time Remaining: <span  class='timeDisp'></span> seconds</h2>")
+				.appendTo("#mainArea");			
+			$(".timeDisp").text(game.timerCount);
+			for (var i = 0; i < 5; i++) {
+				var f = $("<h2 class'gameText'>")
+					.text(game.feedbackArray[i].text)
+					.wrapInner(game.feedbackArray[i].spanID);				
+			}
+			//if answer is correct...
+			if (this.id == game.correctBtn) {
+				game.correctScreen();
+				game.playerRight++;
+				game.update();
+			//if answer is incorrect...
+			} else {
+				game.incorrectScreen();
+				game.playerWrong++;
+				game.update();
 			}
 		})
 	},
-	//goes to next question or end screen
-	"nextQuestion": function () {
-		if(!game.nextQuestionCalled) {			
-			game.nextQuestionCalled = true;
-			game.currentQuestionCalled = false;
-			console.log("nextQuestion has been called");
-			//game continues if less than 10 questions have been answered
-			if(game.questionNumber < 10) {			
-				//resets game variables and html that display and hold questions and answers
-				game.correctAnswer = undefined;
-				game.correctBtn = undefined;
-				$("#rightAnswer").empty();
-				$("#currentQuestion").empty();
-				$("#answer0").empty();
-				$("#answer1").empty();
-				$("#answer2").empty();
-				$("#answer3").empty();
-				game.getCurrentQuestion();
-				$("#main").removeClass('hidden');
-				$("#feedback").addClass('hidden');
-				game.timerCount = 30;
-			} else {
-				$("#feedback").addClass('hidden');
-				console.log("timerOff");
-				game.stopInt();
-				$("#finalScreen").removeClass('hidden');
-				game.update();
-				game.restartCalled=false;
-				game.restart();
-			}
+	//function that displays results after each question
+	"feedbackDisp": function() {
+		$("#mainArea").empty();
+		var c = $('<h2 class="triviaHeader">')
+			.html('Category: ' + game.categoryName)
+			.appendTo("#mainArea");	
+		var t = $("<div>")
+			.html("<h2 class='gameText'>Time Remaining: <span  class='timeDisp'></span> seconds</h2>")
+			.appendTo("#mainArea");		
+		$(".timeDisp").text(game.timerCount);
+		for (var i = 0; i < 5; i++) {
+			var f = $("<div>")
+				.html("<h3 class='gameText'>" + game.feedbackArray[i].text + game.feedbackArray[i].spanID + "</h2>")
+				.appendTo("#mainArea");				
 		}
 	},
-//updates feedback and final screen
+	//updates feedback and final screen
 	"update": function () {
-		console.log("update has been called");
 		$(".numberRight").text(game.playerRight);
 		$('.numberWrong').text(game.playerWrong);
 		$('.numberSkipped').text(game.playerSkipped);
@@ -309,67 +338,63 @@ var game = {
 	"rightAnswer": function () {
 		$("#rightAnswer").html(game.correctAnswer);
 	},
-//if timer runs out on a question	
-	"skippedQuestion": function() {
-		if(!game.skippedQuestionCalled) {
-			game.skippedQuestionCalled = true;
-			console.log("skippedQuestion has been called");
-			console.log("timerOff");
-			game.stopInt();		
-			game.rightAnswer();
-			$("#main").addClass('hidden');
-			$("#feedback").removeClass('hidden');
-			game.playerSkipped++;
-			game.questionNumber++;
-			console.log("Question Number", game.questionNumber)		
-			console.log("player skipped", game.playerSkipped);
-			$("#correctIncorrect").text("out of time.");
-			setTimeout(game.rightAnswer, 500);
-			setTimeout(game.nextQuestion,4000);
-		}
-	},
-//if answer is right, shows this
+
+	//if answer is right, shows this
 	"correctScreen": function () {
-		console.log("correctScreen has been called");
-		$("#main").addClass('hidden');
-		$("#feedback").removeClass('hidden');
+		game.feedbackDisp();
 		game.rightAnswer();			
 		$("#correctIncorrect").text("correct");
 		setTimeout(game.nextQuestion,4000);
 	},
 //if answer is wrong, shows this
 	"incorrectScreen": function () {
-		console.log("incorrectScreen has been called");
-		$("#correctIncorrect").text("incorrect.");
-		$("#main").addClass('hidden');
-		$("#feedback").removeClass('hidden');		
+		game.feedbackDisp();
+		$("#correctIncorrect").text("incorrect.");	
 		setTimeout(game.rightAnswer, 500);
 		//to prevent timer from displaying incorrectly as page loads
 		setTimeout(game.nextQuestion,4000);
 	},
 
+	//goes to next question or end screen
+	"nextQuestion": function () {
+		$("#mainArea").empty();
+		//game continues if less than 10 questions have been answered
+		if(game.questionNumber < 10) {			
+			//resets game variables and html that display and hold questions and answers
+			game.correctAnswer = undefined;
+			game.correctBtn = undefined;
+			game.getCurrentQuestion();
+			game.timerCount = 30;
+		} else {
+			game.stopInt();
+			var c = $('<h2 class="triviaHeader">')
+			.html('Category: ' + game.categoryName)
+			.appendTo("#mainArea");	
+			var t = $("<div>")
+			.html("<h2 class='gameText'>Time Remaining: <span  class='timeDisp'></span> seconds</h2>")
+			.appendTo("#mainArea");			
+			var r = $("<h2 class='gameText'>")
+				.text("Results: ")
+				.appendTo("#mainArea");				
+			$(".timeDisp").text(game.timerCount);
+			for (var i = 2; i < 5; i++) {
+				var f = $("<div>")
+				.html("<h3 class='gameText'>" + game.feedbackArray[i].text + game.feedbackArray[i].spanID + "</h2>")
+				.appendTo("#mainArea");			
+			}
+			var b = $('<button id="restart">')
+					.text("restart")
+					.appendTo("#mainArea");	
+			game.update();
+			game.restart();
+		}
+	},
+
 //if reset button is pressed on end screen, resets variables
 	"restart": function () {	
 		$("#restart").on("click", function () {
-			console.log("reset has been called");
-			game.toggeInt;
-			$('#category').removeClass("hidden");
-			$("#finalScreen").addClass('hidden');
-			$("#currentQuestion").empty();
-			$("#rightAnswer").empty();
-			$("#answer0").empty();
-			$("#answer1").empty();
-			$("#answer2").empty();
-			$("#answer3").empty();
+			$("#mainArea").empty();
 			game.isRunning = false;
-			game.skippedQuestionCalled = false;
-			game.catChoosen=false;
-			game.difChoosen=false,
-			game.getQuestionsCalled=false;
-			game.currentQuestionCalled=false;
-			game.restartCalled=false;
-			game.nextQuestionCalled=false;
-			game.checkAnswerCalled=false;
 			game.difficultyChoosen = undefined;
 			game.categoryChoosen = undefined;
 			game.categoryNumber= undefined;
@@ -385,12 +410,14 @@ var game = {
 			game.playerWrong= 0;
 			game.playerSkipped= 0;
 			game.totalTime=0;
+			game.initial();
 		})
 	}
 
 }
 
 //starts game
-game.choosecategory();
+game.initial();
+
 
 
