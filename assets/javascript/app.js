@@ -111,6 +111,7 @@ var game = {
 	"getQuestionsCalled":false,
 	"currentQuestionCalled":false,
 	"nextQuestionCalled":false,
+	"checkAnswerCalled": false,
 //restarts timer
 	"startInt": function() {
 		console.log("toggleInt has been called");
@@ -203,8 +204,10 @@ var game = {
 //Function that changes question, questions are stored locally after ajax request
 	"getCurrentQuestion" : function() {
 		if(!game.currentQuestionCalled) {
-			game.currentQuestionCalled=true;
+			game.currentQuestionCalled = true;
+			game.checkAnswerCalled = false;
 			game.nextQuestionCalled = false;
+			game.skippedQuestionCalled = false;
 		//In order for time display to be right at the load of the page
 			console.log("getCurrentQuestion has been called");
 			$('.timeDisp').text('30');
@@ -236,36 +239,42 @@ var game = {
 //Function that checks if answer is correct or not
 	"checkAnswer": function() {		
 		$(".answerBtn").on('click', function() {
-			console.log("checkAnswer has been called");
-		//stops timer on answer
-		console.log("timerOff");
-			game.stopInt();
-			game.questionNumber++;
-			console.log("added 1 to questionNumber")		
-		//if answer is correct...
-			if (this.id == game.correctBtn) {
-				game.correctScreen();
-				game.playerRight++;
-				game.update();
-				console.log(game.playerRight);
-		//if answer is incorrect...
-			} else {
-				game.incorrectScreen();
-				game.playerWrong++;
-				game.update();
-				console.log(game.playerWrong);
+			if (!game.checkAnswerCalled) {
+				game.checkAnswerCalled = true;
+				console.log("checkAnswer has been called");
+				//stops timer on answer
+				console.log("timerOff");
+				game.stopInt();
+				game.questionNumber++;
+				console.log("Question Number", game.questionNumber)		
+				//if answer is correct...
+				if (this.id == game.correctBtn) {
+					game.correctScreen();
+					console.log
+					game.playerRight++;
+					console.log("number right", game.playerRight);
+					game.update();
+					console.log(game.playerRight);
+				//if answer is incorrect...
+				} else {
+					game.incorrectScreen();
+					game.playerWrong++;
+					game.update();
+					console.log("number wrong", game.playerWrong);
+				}
+				
 			}
 		})
 	},
 	//goes to next question or end screen
 	"nextQuestion": function () {
-		if(!game.nextQuestionCalled) {
-			game.currentQuestionCalled = false;
+		if(!game.nextQuestionCalled) {			
 			game.nextQuestionCalled = true;
+			game.currentQuestionCalled = false;
 			console.log("nextQuestion has been called");
-		//game continues if less than 10 questions have been answered
+			//game continues if less than 10 questions have been answered
 			if(game.questionNumber < 10) {			
-			//resets game variables and html that display and hold questions and answers
+				//resets game variables and html that display and hold questions and answers
 				game.correctAnswer = undefined;
 				game.correctBtn = undefined;
 				$("#rightAnswer").empty();
@@ -302,17 +311,22 @@ var game = {
 	},
 //if timer runs out on a question	
 	"skippedQuestion": function() {
-		console.log("skippedQuestion has been called");
-		console.log("timerOff");
-		game.stopInt();
-		
-		game.rightAnswer();
-		$("#main").addClass('hidden');
-		$("#feedback").removeClass('hidden');
-		game.playerSkipped++;
-		$("#correctIncorrect").text("out of time.");
-		setTimeout(game.rightAnswer, 500);
-		setTimeout(game.nextQuestion,4000);
+		if(!game.skippedQuestionCalled) {
+			game.skippedQuestionCalled = true;
+			console.log("skippedQuestion has been called");
+			console.log("timerOff");
+			game.stopInt();		
+			game.rightAnswer();
+			$("#main").addClass('hidden');
+			$("#feedback").removeClass('hidden');
+			game.playerSkipped++;
+			game.questionNumber++;
+			console.log("Question Number", game.questionNumber)		
+			console.log("player skipped", game.playerSkipped);
+			$("#correctIncorrect").text("out of time.");
+			setTimeout(game.rightAnswer, 500);
+			setTimeout(game.nextQuestion,4000);
+		}
 	},
 //if answer is right, shows this
 	"correctScreen": function () {
@@ -348,13 +362,14 @@ var game = {
 			$("#answer2").empty();
 			$("#answer3").empty();
 			game.isRunning = false;
+			game.skippedQuestionCalled = false;
 			game.catChoosen=false;
 			game.difChoosen=false,
 			game.getQuestionsCalled=false;
 			game.currentQuestionCalled=false;
-			game.answerCheckedCalled=false;
 			game.restartCalled=false;
 			game.nextQuestionCalled=false;
+			game.checkAnswerCalled=false;
 			game.difficultyChoosen = undefined;
 			game.categoryChoosen = undefined;
 			game.categoryNumber= undefined;
