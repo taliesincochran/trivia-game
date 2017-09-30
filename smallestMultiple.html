@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<p id = "ans">boo</p>
+<script>
+var commonArr = [];
+var commonMul;
+var findMe = function() {
+for (i=380; i<1000000000; i = i+380) {
+	if (i % 11 == 0) {
+		console.log("11", i);
+		if (i % 13 == 0) {
+			console.log("13" , i);
+			if (i % 17 == 0) {
+				console.log("17" , i);
+				if (i % 18 == 0) {
+						console.log("18" , i);
+						if (i % 16 == 0) {
+							console.log("16" , i); {
+								if (i % 15 == 0) {
+									console.log("15" , i);
+										if (i % 14 == 0) {
+											console.log("14" , i);
+											if (i % 12 == 0) {
+												console.log("12" , i);
+												commonMul=i;
+												
+												commonArr.push(commonMul);
+												break;
+											
+										}
+									}
+								}
+							}
+						}				
+
+					}						
+				}
+			}
+		}			
+	}
+}
+findMe();
+console.log(commonMul);
+</script>
+</body>
+</html>
+
