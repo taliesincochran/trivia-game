@@ -260,11 +260,11 @@ var game = {
 		var possible = [game.response.results[game.questionNumber].incorrect_answers[0],game.response.results[game.questionNumber].incorrect_answers[1],game.response.results[game.questionNumber].incorrect_answers[2],"place holder"];			
 		var correctPlace = Math.floor(Math.random()*4);
 			game.correctAnswer= game.response.results[game.questionNumber].correct_answer;
-		if (correctPlace === 0) {
-			game.correctBtn === "button0";
-		} else if (correctPlace === 1) {
+		if (correctPlace == 0) {
+			game.correctBtn = "button0";
+		} else if (correctPlace == 1) {
 			game.correctBtn = "button1"
-		} else if (correctPlace === 2) {
+		} else if (correctPlace == 2) {
 			game.correctBtn = "button2";
 		} else {
 			game.correctBtn = "button3";
